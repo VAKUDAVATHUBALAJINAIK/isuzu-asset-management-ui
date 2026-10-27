@@ -7,7 +7,6 @@
         <div class="title-icon">
           <i class="bi bi-box-seam-fill"></i>
         </div>
-
         <div>
           <h1>Asset Entry</h1>
           <p>Manage and monitor registered assets</p>
@@ -24,52 +23,34 @@
   <!-- TOOLBAR -->
   <div class="asset-toolbar">
 
-    <button
-      type="button"
-      class="toolbar-btn primary"
+    <button type="button" class="toolbar-btn primary"
       (click)="addNewAsset()">
       <i class="bi bi-plus-lg"></i>
       <span>New Asset</span>
     </button>
 
-    <button
-      type="button"
-      class="toolbar-btn import-btn"
-      [disabled]="isImporting"
-      (click)="importExcel()">
+    <button type="button" class="toolbar-btn import-btn"
+      [disabled]="isImporting" (click)="importExcel()">
       <i class="bi bi-file-earmark-arrow-up-fill"></i>
       <span>{{ isImporting ? 'Importing...' : 'Import' }}</span>
     </button>
 
-    <!-- Excel/CSV file input -->
-    <input
-      #excelFileInput
-      type="file"
-      accept=".xlsx,.xls,.csv"
-      hidden
-      (change)="handleExcelImport($event)"
-    />
+    <input #excelFileInput type="file"
+      accept=".xlsx,.xls,.csv" hidden
+      (change)="handleExcelImport($event)" />
 
     <!-- SEARCH -->
     <div class="search-box">
       <i class="bi bi-search search-icon"></i>
-
-      <input
-        type="text"
-        placeholder="Search assets..."
+      <input type="text" placeholder="Search assets..."
         aria-label="Search assets"
-        [(ngModel)]="searchText"
-        (input)="onSearch()"
-      />
+        [(ngModel)]="searchText" (input)="onSearch()" />
     </div>
 
     <!-- STATUS FILTER -->
-    <select
-      class="status-filter"
+    <select class="status-filter"
       aria-label="Filter assets by status"
-      [(ngModel)]="selectedStatus"
-      (change)="onStatusChange()">
-
+      [(ngModel)]="selectedStatus" (change)="onStatusChange()">
       <option value="All">All Status</option>
       <option value="New">New</option>
       <option value="Assigned">Assigned</option>
@@ -79,72 +60,47 @@
     </select>
 
     <!-- PRINT -->
-    <button
-      type="button"
-      class="toolbar-btn print-btn"
-      title="Print"
-      aria-label="Print assets"
+    <button type="button" class="toolbar-btn print-btn"
+      title="Print" aria-label="Print assets"
       (click)="printAssets()">
       <i class="bi bi-printer-fill"></i>
       <span>Print</span>
     </button>
 
     <!-- PDF -->
-    <button
-      type="button"
-      class="toolbar-btn pdf-btn"
-      title="Export PDF"
-      aria-label="Export assets to PDF"
+    <button type="button" class="toolbar-btn pdf-btn"
+      title="Export PDF" aria-label="Export assets to PDF"
       (click)="exportPdf()">
       <i class="bi bi-file-earmark-pdf-fill"></i>
       <span>PDF</span>
     </button>
 
     <!-- EXCEL -->
-    <button
-      type="button"
-      class="toolbar-btn excel-btn"
-      title="Export Excel"
-      aria-label="Export assets to Excel"
+    <button type="button" class="toolbar-btn excel-btn"
+      title="Export Excel" aria-label="Export assets to Excel"
       (click)="exportExcel()">
       <i class="bi bi-file-earmark-excel-fill"></i>
       <span>XLS</span>
     </button>
-
   </div>
 
   <!-- SUCCESS MESSAGE -->
-  <div
-    class="success-message"
-    role="status"
-    *ngIf="successMessage">
-
+  <div class="success-message" role="status" *ngIf="successMessage">
     <i class="bi bi-check-circle-fill"></i>
     <span>{{ successMessage }}</span>
-
-    <button
-      type="button"
-      class="action-btn"
+    <button type="button" class="action-btn"
       aria-label="Dismiss success message"
-      title="Dismiss"
       (click)="successMessage = ''">
       <i class="bi bi-x-lg"></i>
     </button>
   </div>
 
   <!-- PAGE ERROR -->
-  <div
-    class="form-error"
-    role="alert"
-    *ngIf="pageError">
-
+  <div class="form-error page-message-error"
+    role="alert" *ngIf="pageError">
     <i class="bi bi-exclamation-circle-fill"></i>
     <span>{{ pageError }}</span>
-
-    <button
-      type="button"
-      class="action-btn"
-      title="Dismiss error"
+    <button type="button" class="action-btn"
       aria-label="Dismiss error"
       (click)="pageError = ''">
       <i class="bi bi-x-lg"></i>
@@ -152,12 +108,8 @@
   </div>
 
   <!-- LOADING -->
-  <div
-    class="loading-state"
-    role="status"
-    aria-live="polite"
-    *ngIf="isLoading">
-
+  <div class="loading-state" role="status"
+    aria-live="polite" *ngIf="isLoading">
     <i class="bi bi-arrow-repeat loading-icon"></i>
     <span>Loading assets...</span>
   </div>
@@ -165,30 +117,22 @@
   <!-- ASSET GRID -->
   <div class="asset-grid">
 
-    <article
-      class="asset-card"
+    <article class="asset-card"
       *ngFor="let asset of filteredAssets; trackBy: trackByAssetId">
 
-    
-<!-- IMAGE -->
-<div class="asset-image">
+      <!-- IMAGE -->
+      <div class="asset-image">
+        <img
+          *ngIf="asset.image && asset.image.startsWith('data:image/')"
+          [src]="asset.image" [alt]="asset.name"
+          loading="lazy" decoding="async" />
 
-  <img
-    *ngIf="asset.image && asset.image.startsWith('data:image/')"
-    [src]="asset.image"
-    [alt]="asset.name"
-    loading="lazy"
-    decoding="async"
-  />
-
-  <div
-    class="no-image"
-    *ngIf="!asset.image || !asset.image.startsWith('data:image/')">
-    <i class="bi bi-image"></i>
-    <span>No Image</span>
-  </div>
-
-</div>
+        <div class="no-image"
+          *ngIf="!asset.image || !asset.image.startsWith('data:image/')">
+          <i class="bi bi-image"></i>
+          <span>No Image</span>
+        </div>
+      </div>
 
       <!-- ASSET DETAILS -->
       <div class="asset-content">
@@ -204,23 +148,17 @@
 
         <div class="asset-detail">
           <span>Category</span>
-          <strong [title]="asset.category">
-            {{ asset.category || '-' }}
-          </strong>
+          <strong [title]="asset.category">{{ asset.category || '-' }}</strong>
         </div>
 
         <div class="asset-detail">
           <span>Brand</span>
-          <strong [title]="asset.brand">
-            {{ asset.brand || '-' }}
-          </strong>
+          <strong [title]="asset.brand">{{ asset.brand || '-' }}</strong>
         </div>
 
         <div class="asset-detail">
           <span>Department</span>
-          <strong [title]="asset.department">
-            {{ asset.department || '-' }}
-          </strong>
+          <strong [title]="asset.department">{{ asset.department || '-' }}</strong>
         </div>
 
         <div class="asset-detail">
@@ -235,70 +173,52 @@
 
         <div class="asset-detail">
           <span>Holder</span>
-          <strong [title]="asset.holder">
-            {{ asset.holder || 'Unassigned' }}
-          </strong>
+          <strong [title]="asset.holder">{{ asset.holder || 'Unassigned' }}</strong>
         </div>
 
         <!-- CARD FOOTER -->
         <div class="asset-footer">
-
-          <span
-            class="asset-status"
+          <span class="asset-status"
             [ngClass]="getStatusClass(asset.status)">
-
             <i class="bi bi-circle-fill"></i>
             {{ asset.status || 'Unknown' }}
-
           </span>
 
           <div class="asset-actions">
-
-            <button
-              type="button"
-              class="action-btn history"
+            <button type="button" class="action-btn history"
               title="View History"
               [attr.aria-label]="'View history for ' + asset.name"
               (click)="viewHistory(asset)">
               <i class="bi bi-clock-history"></i>
             </button>
 
-            <button
-              type="button"
-              class="action-btn edit"
+            <button type="button" class="action-btn edit"
               title="Edit Asset"
               [attr.aria-label]="'Edit ' + asset.name"
               (click)="editAsset(asset)">
               <i class="bi bi-pencil-square"></i>
             </button>
 
-            <button
-              type="button"
-              class="action-btn delete"
+            <button type="button" class="action-btn delete"
               title="Delete Asset"
               [disabled]="isDeleting"
               [attr.aria-label]="'Delete ' + asset.name"
               (click)="deleteAsset(asset)">
               <i class="bi bi-trash3-fill"></i>
             </button>
-
           </div>
         </div>
-
       </div>
     </article>
 
     <!-- EMPTY STATE -->
-    <div
-      class="no-results"
+    <div class="no-results"
       *ngIf="!isLoading && filteredAssets.length === 0">
-
       <div class="empty-icon">
         <i class="bi bi-box-seam"></i>
       </div>
 
       <h3>No Assets Found</h3>
-
       <p>
         {{
           searchText || selectedStatus !== 'All'
@@ -307,313 +227,411 @@
         }}
       </p>
 
-      <button
-        *ngIf="!searchText && selectedStatus === 'All'"
-        type="button"
-        class="empty-add-btn"
+      <button *ngIf="!searchText && selectedStatus === 'All'"
+        type="button" class="empty-add-btn"
         (click)="addNewAsset()">
-
         <i class="bi bi-plus-lg"></i>
         Add Asset
-
       </button>
-
     </div>
   </div>
 </section>
 
-<!-- ASSET FORM MODAL -->
-<div
-  class="asset-form-overlay"
-  *ngIf="showAssetForm">
-
-  <div
-    class="asset-form"
-    role="dialog"
-    aria-modal="true"
+<!-- =====================================================
+     ADD / EDIT ASSET MODAL
+     ===================================================== -->
+<div class="asset-form-overlay" *ngIf="showAssetForm">
+  <div class="asset-form" role="dialog" aria-modal="true"
     [attr.aria-label]="isEditMode ? 'Edit asset' : 'Add new asset'">
 
-    <!-- FORM HEADER -->
     <div class="form-header">
-
       <div class="form-title-row">
-
         <div class="form-title-icon">
-          <i
-            class="bi"
+          <i class="bi"
             [ngClass]="isEditMode ? 'bi-pencil-square' : 'bi-plus-square-fill'">
           </i>
         </div>
-
         <div>
           <h3>{{ isEditMode ? 'Edit Asset' : 'New Asset' }}</h3>
-
-          <p>
-            {{
-              isEditMode
-                ? 'Update asset information'
-                : 'Register a new asset'
-            }}
-          </p>
+          <p>{{ isEditMode ? 'Update asset information' : 'Register a new asset' }}</p>
         </div>
-
       </div>
 
-      <button
-        type="button"
-        class="close-btn"
-        title="Close"
-        aria-label="Close asset form"
-        [disabled]="isSaving"
-        (click)="closeAssetForm()">
+      <button type="button" class="close-btn"
+        title="Close" aria-label="Close asset form"
+        [disabled]="isSaving" (click)="closeAssetForm()">
         <i class="bi bi-x-lg"></i>
       </button>
-
     </div>
 
-    <!-- FORM ERROR -->
-    <div
-      class="form-error"
-      role="alert"
-      *ngIf="formError">
-
+    <div class="form-error" role="alert" *ngIf="formError">
       <i class="bi bi-exclamation-circle-fill"></i>
       <span>{{ formError }}</span>
-
     </div>
 
-    <!-- FORM BODY -->
     <div class="form-body">
 
-      <!-- ASSET NAME -->
       <div class="form-group">
         <label for="assetName">Asset Name <span>*</span></label>
-
         <div class="input-wrapper">
           <i class="bi bi-box-seam"></i>
-
-          <input
-            id="assetName"
-            name="assetName"
-            type="text"
-            required
-            maxlength="200"
-            autocomplete="off"
-            [(ngModel)]="assetName"
-            placeholder="Enter asset name"
-          />
+          <input id="assetName" name="assetName" type="text"
+            required maxlength="200" autocomplete="off"
+            [(ngModel)]="assetName" placeholder="Enter asset name" />
         </div>
       </div>
 
-      <!-- CATEGORY -->
       <div class="form-group">
         <label for="category">Category <span>*</span></label>
-
         <div class="input-wrapper">
           <i class="bi bi-tags"></i>
-
-          <input
-            id="category"
-            name="category"
-            type="text"
-            required
-            [(ngModel)]="category"
-            placeholder="Enter category"
-          />
+          <input id="category" name="category" type="text"
+            required [(ngModel)]="category" placeholder="Enter category" />
         </div>
       </div>
 
-      <!-- BRAND -->
       <div class="form-group">
         <label for="brand">Brand <span>*</span></label>
-
         <div class="input-wrapper">
           <i class="bi bi-award"></i>
-
-          <input
-            id="brand"
-            name="brand"
-            type="text"
-            required
-            [(ngModel)]="brand"
-            placeholder="Enter brand"
-          />
+          <input id="brand" name="brand" type="text"
+            required [(ngModel)]="brand" placeholder="Enter brand" />
         </div>
       </div>
 
-      <!-- DEPARTMENT -->
       <div class="form-group">
         <label for="department">Department <span>*</span></label>
-
         <div class="input-wrapper">
           <i class="bi bi-building"></i>
-
-          <input
-            id="department"
-            name="department"
-            type="text"
-            required
-            [(ngModel)]="department"
-            placeholder="Enter department"
-          />
+          <input id="department" name="department" type="text"
+            required [(ngModel)]="department" placeholder="Enter department" />
         </div>
       </div>
 
-      <!-- COST -->
       <div class="form-group">
         <label for="cost">Cost <span>*</span></label>
-
         <div class="input-wrapper">
           <span class="currency">₹</span>
-
-          <input
-            id="cost"
-            name="cost"
-            type="number"
-            min="0.01"
-            step="0.01"
-            required
-            [(ngModel)]="cost"
-            placeholder="Enter cost"
-          />
+          <input id="cost" name="cost" type="number"
+            min="0.01" step="0.01" required
+            [(ngModel)]="cost" placeholder="Enter cost" />
         </div>
       </div>
 
-      <!-- BOOK VALUE -->
       <div class="form-group">
         <label for="bookValue">Book Value <span>*</span></label>
-
         <div class="input-wrapper">
           <span class="currency">₹</span>
-
-          <input
-            id="bookValue"
-            name="bookValue"
-            type="number"
-            min="0"
-            step="0.01"
-            required
-            [(ngModel)]="bookValue"
-            placeholder="Enter book value"
-          />
+          <input id="bookValue" name="bookValue" type="number"
+            min="0" step="0.01" required
+            [(ngModel)]="bookValue" placeholder="Enter book value" />
         </div>
       </div>
 
-      <!-- HOLDER -->
       <div class="form-group">
-        <label for="holder">
-          Holder
+        <label for="holder">Holder
           <span *ngIf="status === 'Assigned'">*</span>
         </label>
-
         <div class="input-wrapper">
           <i class="bi bi-person"></i>
-
-          <input
-            id="holder"
-            name="holder"
-            type="text"
+          <input id="holder" name="holder" type="text"
             [required]="status === 'Assigned'"
-            [(ngModel)]="holder"
-            placeholder="Enter holder name"
-          />
+            [(ngModel)]="holder" placeholder="Enter holder name" />
         </div>
       </div>
 
-      <!-- STATUS -->
       <div class="form-group">
         <label for="status">Status <span>*</span></label>
-
         <div class="input-wrapper select-wrapper">
           <i class="bi bi-activity"></i>
-
-          <select
-            id="status"
-            name="status"
-            required
-            [(ngModel)]="status">
-
+          <select id="status" name="status" required [(ngModel)]="status">
             <option value="">Select status</option>
             <option value="New">New</option>
             <option value="Assigned">Assigned</option>
             <option value="Available">Available</option>
             <option value="Maintenance">Maintenance</option>
             <option value="Disposed">Disposed</option>
-
           </select>
         </div>
       </div>
 
-      <!-- IMAGE UPLOAD -->
       <div class="form-group full-width">
         <label for="assetImage">Asset Image</label>
-
         <div class="file-upload">
           <i class="bi bi-cloud-arrow-up-fill"></i>
-
-          <input
-            #imageInput
-            id="assetImage"
-            name="assetImage"
-            type="file"
-            accept="image/*"
-            (change)="onImageSelected($event)"
-          />
-
+          <input #imageInput id="assetImage" name="assetImage"
+            type="file" accept="image/*"
+            (change)="onImageSelected($event)" />
           <span>Choose asset image (maximum 5 MB)</span>
         </div>
       </div>
 
-      <!-- IMAGE PREVIEW -->
       <div class="image-preview" *ngIf="selectedImage">
-        <img
-          [src]="selectedImage"
-          alt="Selected asset preview"
-          loading="lazy"
-        />
+        <img [src]="selectedImage" alt="Selected asset preview" loading="lazy" />
       </div>
-
     </div>
 
-    <!-- FORM FOOTER -->
     <div class="form-footer">
-
-      <button
-        type="button"
-        class="cancel-btn"
-        [disabled]="isSaving"
-        (click)="closeAssetForm()">
-
+      <button type="button" class="cancel-btn"
+        [disabled]="isSaving" (click)="closeAssetForm()">
         <i class="bi bi-x-lg"></i>
         Cancel
-
       </button>
 
-      <button
-        type="button"
-        class="save-btn"
-        [disabled]="isSaving"
-        (click)="saveAsset()">
-
-        <i
-          class="bi"
-          [ngClass]="isSaving
-            ? 'bi-arrow-repeat'
-            : isEditMode
-              ? 'bi-check2-circle'
-              : 'bi-plus-circle-fill'">
+      <button type="button" class="save-btn"
+        [disabled]="isSaving" (click)="saveAsset()">
+        <i class="bi"
+          [ngClass]="isSaving ? 'bi-arrow-repeat' :
+            isEditMode ? 'bi-check2-circle' : 'bi-plus-circle-fill'">
         </i>
-
         {{
-          isSaving
-            ? 'Saving...'
-            : isEditMode
-              ? 'Update Asset'
-              : 'Save Asset'
+          isSaving ? 'Saving...' :
+            isEditMode ? 'Update Asset' : 'Save Asset'
         }}
-
       </button>
-
     </div>
   </div>
+</div>
+
+<!-- =====================================================
+     ASSET HISTORY TIMELINE MODAL
+     ===================================================== -->
+<div class="history-overlay"
+  *ngIf="showHistory"
+  (click)="closeHistory()">
+
+  <section class="history-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="historyModalTitle"
+    (click)="$event.stopPropagation()">
+
+    <!-- MODAL HEADER -->
+    <header class="history-modal-header">
+      <div class="history-heading">
+        <div class="history-heading-icon">
+          <i class="bi bi-clock-history"></i>
+        </div>
+
+        <div class="history-heading-text">
+          <h2 id="historyModalTitle">Asset History</h2>
+          <p>Track changes and activity for this asset</p>
+        </div>
+      </div>
+
+      <button type="button" class="history-close-btn"
+        aria-label="Close asset history"
+        title="Close" (click)="closeHistory()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+
+    
+<!-- SELECTED ASSET SUMMARY -->
+<div
+  class="history-asset-summary"
+  *ngIf="selectedHistoryAsset as selectedAsset"
+>
+  <div class="history-asset-heading">
+    <div class="history-asset-icon">
+      <i class="bi bi-box-seam"></i>
+    </div>
+
+    <div class="history-asset-info">
+      <span class="history-eyebrow">ASSET DETAILS</span>
+      <h3 [title]="selectedAsset.name">
+        {{ selectedAsset.name }}
+      </h3>
+      <span class="history-asset-id">
+        <i class="bi bi-upc-scan"></i>
+        {{ selectedAsset.assetId || 'Pending ID' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="history-asset-details">
+    <div class="history-detail-item">
+      <span class="history-detail-label">Category</span>
+      <strong>{{ selectedAsset.category || '-' }}</strong>
+    </div>
+
+    <div class="history-detail-item">
+      <span class="history-detail-label">Brand</span>
+      <strong>{{ selectedAsset.brand || '-' }}</strong>
+    </div>
+
+    <div class="history-detail-item">
+      <span class="history-detail-label">Department</span>
+      <strong>{{ selectedAsset.department || '-' }}</strong>
+    </div>
+
+    <div class="history-detail-item">
+      <span class="history-detail-label">Status</span>
+      <span
+        class="history-current-status"
+        [ngClass]="getStatusClass(selectedAsset.status)"
+      >
+        <i class="bi bi-circle-fill"></i>
+        {{ selectedAsset.status || 'Unknown' }}
+      </span>
+    </div>
+  </div>
+</div>
+
+
+    <!-- TIMELINE CONTENT -->
+    <div class="history-body">
+
+      <!-- LOADING
+      <div class="history-loading" *ngIf="loadingHistory">
+        <span class="history-spinner"></span>
+        <p>Loading asset history...</p>
+      </div> -->
+
+      <!-- ERROR -->
+      <div class="history-inline-error"
+        *ngIf="!loadingHistory && pageError">
+        <i class="bi bi-exclamation-circle"></i>
+        <span>{{ pageError }}</span>
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div class="history-empty"
+        *ngIf="!loadingHistory && assetHistory.length === 0 && !pageError">
+        <div class="history-empty-icon">
+          <i class="bi bi-clock-history"></i>
+        </div>
+        <h3>No History Found</h3>
+        <p>No history records are available for this asset.</p>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="history-timeline"
+        *ngIf="!loadingHistory && assetHistory.length > 0">
+
+        <article class="timeline-entry"
+          *ngFor="let item of assetHistory; let last = last">
+
+          <!-- LEFT TIMELINE -->
+          <div class="timeline-rail">
+            <div class="timeline-marker"
+              [ngClass]="{
+                'marker-status': !!(item.previous_Status || item.new_Status),
+                'marker-edit': !!item.field_Name,
+                'marker-default': !(item.previous_Status || item.new_Status || item.field_Name)
+              }">
+              <i class="bi"
+                [ngClass]="{
+                  'bi-arrow-left-right': !!(item.previous_Status || item.new_Status),
+                  'bi-pencil-square': !!item.field_Name && !(item.previous_Status || item.new_Status),
+                  'bi-clock-history': !(item.previous_Status || item.new_Status || item.field_Name)
+                }">
+              </i>
+            </div>
+
+            <div class="timeline-connector" *ngIf="!last"></div>
+          </div>
+
+          <!-- EVENT CONTENT -->
+          <div class="timeline-card">
+
+            <div class="timeline-card-header">
+              <div class="timeline-event-title">
+                <h3>{{ item.action || 'Asset Updated' }}</h3>
+                <span class="timeline-event-type"
+                  *ngIf="item.previous_Status || item.new_Status">
+                  Status update
+                </span>
+                <span class="timeline-event-type edit-type"
+                  *ngIf="item.field_Name && !(item.previous_Status || item.new_Status)">
+                  Field update
+                </span>
+              </div>
+
+              <time class="timeline-date" *ngIf="item.created_At">
+                <i class="bi bi-calendar3"></i>
+                {{ item.created_At | date:'medium' }}
+              </time>
+            </div>
+
+            <!-- STATUS TRANSITION -->
+            <div class="timeline-status-change"
+              *ngIf="item.previous_Status || item.new_Status">
+
+              <div class="timeline-status-value old-status">
+                <span class="status-dot"></span>
+                <span>{{ item.previous_Status || 'N/A' }}</span>
+              </div>
+
+              <div class="timeline-transition-arrow">
+                <i class="bi bi-arrow-right"></i>
+              </div>
+
+              <div class="timeline-status-value new-status">
+                <span class="status-dot"></span>
+                <span>{{ item.new_Status || 'N/A' }}</span>
+              </div>
+            </div>
+
+            <!-- FIELD CHANGE -->
+            <div class="timeline-field-change" *ngIf="item.field_Name">
+              <div class="timeline-field-label">
+                <i class="bi bi-pencil-square"></i>
+                {{ item.field_Name }}
+              </div>
+
+              <div class="timeline-field-values"
+                *ngIf="item.old_Value || item.new_Value">
+                <span class="field-old-value">
+                  {{ item.old_Value || 'N/A' }}
+                </span>
+                <i class="bi bi-arrow-right"></i>
+                <span class="field-new-value">
+                  {{ item.new_Value || 'N/A' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <p class="timeline-description" *ngIf="item.details">
+              <i class="bi bi-info-circle"></i>
+              {{ item.details }}
+            </p>
+
+            <!-- EVENT FOOTER -->
+            <div class="timeline-card-footer">
+              <div class="timeline-user">
+                <span class="timeline-user-avatar">
+                  <i class="bi bi-person-fill"></i>
+                </span>
+                <span class="timeline-user-label">Performed by</span>
+                <strong>{{ item.performed_By || 'Unknown' }}</strong>
+              </div>
+            </div>
+
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- MODAL FOOTER -->
+    <footer class="history-modal-footer">
+      <div class="history-count">
+        <span class="history-count-icon">
+          <i class="bi bi-clock-history"></i>
+        </span>
+        <span>
+          <strong>{{ assetHistory.length }}</strong>
+          record(s)
+        </span>
+      </div>
+
+      <button type="button" class="history-footer-close"
+        (click)="closeHistory()">
+        <i class="bi bi-x-lg"></i>
+        Close
+      </button>
+    </footer>
+
+  </section>
 </div>

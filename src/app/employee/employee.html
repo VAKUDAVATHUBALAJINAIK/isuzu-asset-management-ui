@@ -1,0 +1,258 @@
+
+<div class="employee-page">
+  <header class="page-heading">
+    <div class="heading-left">
+      <div class="heading-icon">♟</div>
+      <div>
+        <h1>Employee</h1>
+        <p>Manage employee records</p>
+      </div>
+    </div>
+    <div class="breadcrumb">
+      <span>⌂</span><span>/</span><span>Employee</span>
+    </div>
+  </header>
+
+  <main class="employee-panel">
+    <section class="toolbar">
+      <div class="toolbar-actions">
+        <button class="btn btn-primary" (click)="openAdd()">
+          <span class="plus">＋</span> New Employee
+        </button>
+
+        <label class="btn btn-outline import-btn">
+          <span>♧</span> Import Excel
+          <input type="file" accept=".xlsx,.xls,.csv"
+                 (change)="importFile($event)" hidden>
+        </label>
+      </div>
+
+      <label class="search-box">
+        <span>⌕</span>
+        <input
+          type="search"
+          placeholder="Search employees by name, ID, department..."
+          [(ngModel)]="searchText"
+          (ngModelChange)="onFilterChange()">
+      </label>
+
+      <label class="department-filter">
+        <span>▽</span>
+        <select [(ngModel)]="selectedDepartment"
+                (ngModelChange)="onFilterChange()">
+          <option value="">All Departments</option>
+          <option *ngFor="let department of departments" [value]="department">
+            {{ department }}
+          </option>
+        </select>
+      </label>
+
+      <div class="export-actions">
+        <button class="btn btn-outline export-btn" (click)="exportPdf()">
+          <span>♧</span> PDF
+        </button>
+        <button class="btn btn-outline export-btn" (click)="exportExcel()">
+          <span>▤</span> Excel
+        </button>
+      </div>
+    </section>
+
+    <section class="employee-grid">
+      <article
+        *ngFor="let employee of paginatedEmployees; let i = index"
+        class="employee-card"
+        [ngClass]="'tone-' + ((employee.id - 1) % 8)">
+
+        <div class="card-top">
+          <div class="identity">
+            <div class="avatar">{{ employee.initials }}</div>
+            <div class="identity-text">
+              <h3>{{ employee.name }}</h3>
+              <p>{{ employee.employeeId }}</p>
+            </div>
+          </div>
+
+          <button
+            class="status-pill"
+            [class.inactive]="!employee.active"
+            (click)="toggleStatus(employee)"
+            [title]="'Change status for ' + employee.name">
+            <span class="status-dot"></span>
+            {{ employee.active ? 'Active' : 'Inactive' }}
+          </button>
+        </div>
+
+        <div class="details">
+          <div class="detail-row">
+            <span class="detail-icon">♟</span>
+            <span class="detail-label">Designation</span>
+            <span class="detail-value">{{ employee.designation }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">▤</span>
+            <span class="detail-label">Department</span>
+            <span class="detail-value">{{ employee.department }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">⌖</span>
+            <span class="detail-label">Branch</span>
+            <span class="detail-value">{{ employee.branch }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">♧</span>
+            <span class="detail-label">Mobile</span>
+            <span class="detail-value">{{ employee.mobile }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">✉</span>
+            <span class="detail-label">Email</span>
+            <span class="detail-value email-value" [title]="employee.email">
+              {{ employee.email }}
+            </span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="action-btn view-btn" title="View employee"
+                  (click)="openView(employee)">⌕</button>
+          <button class="action-btn edit-btn" title="Edit employee"
+                  (click)="openEdit(employee)">✎</button>
+          <button class="action-btn delete-btn" title="Delete employee"
+                  (click)="deleteEmployee(employee)">♜</button>
+        </div>
+      </article>
+
+      <div class="empty-state" *ngIf="filteredEmployees.length === 0">
+        <div class="empty-icon">⌕</div>
+        <h3>No employees found</h3>
+        <p>Try changing your search or department filter.</p>
+        <button class="btn btn-primary" (click)="openAdd()">＋ New Employee</button>
+      </div>
+    </section>
+
+    <footer class="pagination-bar">
+      <span class="total-count">Total: {{ filteredEmployees.length }} employees</span>
+
+      <div class="pagination-controls">
+        <span>Showing {{ showingStart }}-{{ showingEnd }} of
+          {{ filteredEmployees.length }} entries</span>
+
+        <label class="page-size">
+          Rows per page:
+          <select [(ngModel)]="pageSize" (ngModelChange)="onFilterChange()">
+            <option [ngValue]="4">4</option>
+            <option [ngValue]="8">8</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="20">20</option>
+          </select>
+        </label>
+
+        <button class="page-btn current-page">{{ currentPage }}</button>
+        <button class="page-btn" [disabled]="currentPage >= totalPages"
+                (click)="changePage(currentPage + 1)">›</button>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<div class="modal-backdrop" *ngIf="showForm" (click)="closeForm()">
+  <section class="employee-modal" role="dialog" aria-modal="true"
+           aria-labelledby="employee-modal-title"
+           (click)="$event.stopPropagation()">
+
+    <header class="modal-header">
+      <div>
+        <h2 id="employee-modal-title">
+          {{ modalMode === 'add' ? 'New Employee' :
+             modalMode === 'edit' ? 'Edit Employee' : 'Employee Details' }}
+        </h2>
+        <p>
+          {{ modalMode === 'view' ? 'Review employee information' :
+             'Enter the employee information below' }}
+        </p>
+      </div>
+      <button class="modal-close" type="button"
+              (click)="closeForm()">×</button>
+    </header>
+
+    <form #employeeForm="ngForm" (ngSubmit)="saveEmployee()">
+      <div class="form-grid">
+        <label>
+          Employee ID
+          <input name="employeeId" [(ngModel)]="form.employeeId" readonly>
+        </label>
+
+        <label>
+          Employee Name <span class="required">*</span>
+          <input name="name" [(ngModel)]="form.name" required
+                 [readonly]="modalMode === 'view'"
+                 placeholder="Enter full name">
+        </label>
+
+        <label>
+          Designation <span class="required">*</span>
+          <input name="designation" [(ngModel)]="form.designation" required
+                 [readonly]="modalMode === 'view'"
+                 placeholder="e.g. Software Engineer">
+        </label>
+
+        <label>
+          Department <span class="required">*</span>
+          <select name="department" [(ngModel)]="form.department" required
+                  [disabled]="modalMode === 'view'">
+            <option value="">Select department</option>
+            <option *ngFor="let department of departments" [value]="department">
+              {{ department }}
+            </option>
+            <option value="IT" *ngIf="!departments.includes('IT')">IT</option>
+            <option value="HR" *ngIf="!departments.includes('HR')">HR</option>
+            <option value="Finance" *ngIf="!departments.includes('Finance')">Finance</option>
+            <option value="Sales" *ngIf="!departments.includes('Sales')">Sales</option>
+            <option value="Support" *ngIf="!departments.includes('Support')">Support</option>
+          </select>
+        </label>
+
+        <label>
+          Branch
+          <input name="branch" [(ngModel)]="form.branch"
+                 [readonly]="modalMode === 'view'"
+                 placeholder="Enter branch">
+        </label>
+
+        <label>
+          Mobile
+          <input name="mobile" [(ngModel)]="form.mobile"
+                 [readonly]="modalMode === 'view'"
+                 placeholder="Enter mobile number">
+        </label>
+
+        <label class="full-width">
+          Email
+          <input type="email" name="email" [(ngModel)]="form.email"
+                 [readonly]="modalMode === 'view'"
+                 placeholder="name@example.com">
+        </label>
+
+        <label class="status-field full-width">
+          <input type="checkbox" name="active" [(ngModel)]="form.active"
+                 [disabled]="modalMode === 'view'">
+          <span>Active employee</span>
+        </label>
+      </div>
+
+      <footer class="modal-footer">
+        <button class="btn btn-outline" type="button" (click)="closeForm()">
+          {{ modalMode === 'view' ? 'Close' : 'Cancel' }}
+        </button>
+        <button class="btn btn-primary" type="submit"
+                *ngIf="modalMode !== 'view'"
+                [disabled]="employeeForm.invalid">
+          {{ modalMode === 'edit' ? 'Save Changes' : 'Create Employee' }}
+        </button>
+        <button class="btn btn-outline" type="button"
+                *ngIf="modalMode === 'view'"
+                (click)="openEdit(form)">Edit Employee</button>
+      </footer>
+    </form>
+  </section>
+</div>

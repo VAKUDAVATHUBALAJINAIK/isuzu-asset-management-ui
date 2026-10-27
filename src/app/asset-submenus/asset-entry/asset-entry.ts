@@ -1,11 +1,14 @@
+
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
@@ -16,6 +19,9 @@ import autoTable from 'jspdf-autotable';
 import { AssetentryService } from '../../services/assetentry.service';
 import type { Asset as ApiAsset } from '../../services/assetentry.service';
 import { environment } from '../../../environments/environment';
+import { AssetHistoryService,type AssetHistory} from '../../services/asset-history.service';
+
+
 
 interface AssetCard {
   assetId: string;
@@ -52,7 +58,9 @@ export class AssetEntry implements OnInit, OnDestroy {
   excelFileInput?: ElementRef<HTMLInputElement>;
 
   constructor(
-    private readonly assetService: AssetentryService
+    private readonly assetService: AssetentryService,
+    private readonly cdr: ChangeDetectorRef,
+     private readonly assetHistoryService: AssetHistoryService,
   ) {}
 
   ngOnInit(): void {
@@ -130,19 +138,19 @@ export class AssetEntry implements OnInit, OnDestroy {
 
   get assignedAssets(): number {
     return this.assets.filter(
-      asset => asset.status.toLowerCase() === 'assigned'
+      asset => asset.status.trim().toLowerCase() === 'assigned'
     ).length;
   }
 
   get availableAssets(): number {
     return this.assets.filter(
-      asset => asset.status.toLowerCase() === 'available'
+      asset => asset.status.trim().toLowerCase() === 'available'
     ).length;
   }
 
   get maintenanceAssets(): number {
     return this.assets.filter(
-      asset => asset.status.toLowerCase() === 'maintenance'
+      asset => asset.status.trim().toLowerCase() === 'maintenance'
     ).length;
   }
 
@@ -151,11 +159,17 @@ export class AssetEntry implements OnInit, OnDestroy {
   // GET /api/Asset/GetAllAssets
   // =========================================
 
-  loadAssets(): void {
+  loadAssets(preserveMessages = false): void {
     this.loading = true;
     this.isLoading = true;
-    this.pageError = '';
-    this.errorMessage = '';
+
+    if (!preserveMessages) {
+      this.pageError = '';
+      this.errorMessage = '';
+    }
+
+    // Notify Angular that loading has started.
+    this.cdr.markForCheck();
 
     this.assetService.getAllAssets()
       .pipe(
@@ -163,28 +177,41 @@ export class AssetEntry implements OnInit, OnDestroy {
         finalize(() => {
           this.loading = false;
           this.isLoading = false;
+
+          // Refresh the view after loading completes.
+          this.cdr.markForCheck();
         })
       )
       .subscribe({
         next: response => {
+          console.log('GetAllAssets API response:', response);
+
           const apiAssets = this.extractAssetArray(response);
 
-          this.assets = apiAssets.map(
-            item => this.mapApiAssetToCard(item)
+          this.assets = apiAssets.map(item =>
+            this.mapApiAssetToCard(item)
           );
 
           this.applyFilters();
+
+          console.log('Assets loaded:', this.assets.length);
+          console.log('Cards to display:', this.filteredAssets.length);
+
+          // Notify Angular that the card collection has changed.
+          this.cdr.markForCheck();
         },
+
         error: error => {
           console.error('Failed to load assets:', error);
 
           this.pageError =
-            error?.error?.message ??
             error?.error?.Message ??
+            error?.error?.message ??
+            error?.message ??
             'Unable to load assets. Check whether the API is running.';
 
-          this.assets = [];
-          this.filteredAssets = [];
+          // Keep existing cards if refreshing fails.
+          this.cdr.markForCheck();
         }
       });
   }
@@ -208,6 +235,10 @@ export class AssetEntry implements OnInit, OnDestroy {
       return result['assets'] as ApiAsset[];
     }
 
+    if (Array.isArray(result['Assets'])) {
+      return result['Assets'] as ApiAsset[];
+    }
+
     if (Array.isArray(result['data'])) {
       return result['data'] as ApiAsset[];
     }
@@ -215,6 +246,29 @@ export class AssetEntry implements OnInit, OnDestroy {
     if (Array.isArray(result['result'])) {
       return result['result'] as ApiAsset[];
     }
+
+    const nestedData = result['data'];
+
+    if (
+      nestedData &&
+      typeof nestedData === 'object' &&
+      !Array.isArray(nestedData)
+    ) {
+      const nested = nestedData as Record<string, unknown>;
+
+      if (Array.isArray(nested['assets'])) {
+        return nested['assets'] as ApiAsset[];
+      }
+
+      if (Array.isArray(nested['Assets'])) {
+        return nested['Assets'] as ApiAsset[];
+      }
+    }
+
+    console.warn(
+      'GetAllAssets response did not contain a recognized asset array.',
+      response
+    );
 
     return [];
   }
@@ -244,7 +298,8 @@ export class AssetEntry implements OnInit, OnDestroy {
         ''
       ),
 
-image: rawImage,
+      image: this.resolveImageUrl(rawImage),
+
       name: String(
         data['asset_Name'] ??
         data['assetName'] ??
@@ -253,11 +308,28 @@ image: rawImage,
         ''
       ),
 
-      category: String(data['category'] ?? data['Category'] ?? ''),
-      brand: String(data['brand'] ?? data['Brand'] ?? ''),
-      department: String(data['department'] ?? data['Department'] ?? ''),
+      category: String(
+        data['category'] ??
+        data['Category'] ??
+        ''
+      ),
 
-      cost: this.toNumber(data['cost'] ?? data['Cost']),
+      brand: String(
+        data['brand'] ??
+        data['Brand'] ??
+        ''
+      ),
+
+      department: String(
+        data['department'] ??
+        data['Department'] ??
+        ''
+      ),
+
+      cost: this.toNumber(
+        data['cost'] ??
+        data['Cost']
+      ),
 
       bookValue: this.toNumber(
         data['book_Value'] ??
@@ -265,67 +337,130 @@ image: rawImage,
         data['Book_Value']
       ),
 
-      holder: String(data['holder'] ?? data['Holder'] ?? ''),
-      status: String(data['status'] ?? data['Status'] ?? '')
+      holder: String(
+        data['holder'] ??
+        data['Holder'] ??
+        ''
+      ),
+
+      status: String(
+        data['status'] ??
+        data['Status'] ??
+        ''
+      )
     };
   }
 
   // =========================================
   // IMAGE URL HANDLING
   // =========================================
-  
 
+  private resolveImageUrl(image: string): string {
+    const value = image.trim();
 
+    if (!value) {
+      return '';
+    }
 
- 
-private resolveImageUrl(image: string): string {
-  const value = image.trim();
+    if (/^data:image\/[a-zA-Z0-9.+-]+;base64,/i.test(value)) {
+      return value;
+    }
 
-  if (!value) {
+    if (/^https?:\/\//i.test(value)) {
+      return value;
+    }
+
+    if (value.startsWith('/')) {
+      const apiOrigin = environment.apiUrl.replace(/\/api\/?$/i, '');
+      return `${apiOrigin}${value}`;
+    }
+
+    if (/^[A-Za-z0-9+/=\s]+$/.test(value)) {
+      return `data:image/jpeg;base64,${value.replace(/\s/g, '')}`;
+    }
+
+    console.warn('Unsupported asset image format.');
     return '';
   }
 
-  // Base64 image data URL
-  if (/^data:image\/[a-zA-Z0-9.+-]+;base64,/i.test(value)) {
-    return value;
+  private toNumber(value: unknown): number {
+    const numberValue = Number(value ?? 0);
+
+    return Number.isFinite(numberValue) ? numberValue : 0;
   }
 
-  // Normal image URL
-  if (/^https?:\/\//i.test(value)) {
-    return value;
+  // =========================================
+  // API RESPONSE HELPERS
+  // =========================================
+
+  private asRecord(value: unknown): Record<string, unknown> | null {
+    if (
+      value &&
+      typeof value === 'object' &&
+      !Array.isArray(value)
+    ) {
+      return value as Record<string, unknown>;
+    }
+
+    return null;
   }
 
-  // Relative image path
-  if (value.startsWith('/')) {
-    const apiOrigin = environment.apiUrl.replace(/\/api\/?$/i, '');
-    return `${apiOrigin}${value}`;
+  private getApiMessage(
+    response: unknown,
+    fallback: string
+  ): string {
+    const result = this.asRecord(response);
+
+    return String(
+      result?.['Message'] ??
+      result?.['message'] ??
+      result?.['ErrorMessage'] ??
+      fallback
+    );
   }
 
-  // Raw Base64 without a data URL prefix
-  if (/^[A-Za-z0-9+/=\s]+$/.test(value)) {
-    return `data:image/jpeg;base64,${value.replace(/\s/g, '')}`;
+  private isApiSuccess(response: unknown): boolean {
+    const result = this.asRecord(response);
+
+    if (!result) {
+      return true;
+    }
+
+    const rawStatus = result['Status'] ?? result['status'];
+
+    if (
+      rawStatus === 0 ||
+      rawStatus === false ||
+      rawStatus === '0' ||
+      rawStatus === 'false'
+    ) {
+      return false;
+    }
+
+    if (
+      result['success'] === false ||
+      result['Success'] === false
+    ) {
+      return false;
+    }
+
+    return true;
   }
-
-  console.warn('Unsupported asset image format.');
-  return '';
-}
-
-private toNumber(value: unknown): number {
-  const numberValue = Number(value ?? 0);
-
-  return Number.isFinite(numberValue) ? numberValue : 0;
-}
-
-
 
   // =========================================
   // OPEN AND CLOSE ASSET FORM
   // =========================================
 
   addNewAsset(): void {
+    if (this.isSaving) {
+      return;
+    }
+
     this.resetForm();
     this.isEditMode = false;
     this.showAssetForm = true;
+    this.successMessage = '';
+    this.pageError = '';
   }
 
   closeAssetForm(): void {
@@ -366,20 +501,27 @@ private toNumber(value: unknown): number {
 
     const reader = new FileReader();
 
-   
-reader.onload = () => {
-  if (typeof reader.result === 'string') {
-    this.selectedImage = reader.result;
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        this.selectedImage = reader.result;
 
-    console.log('Image type:', file.type);
-    console.log('Image URL prefix:', this.selectedImage.substring(0, 30));
-    console.log('Image data length:', this.selectedImage.length);
-  }
-};
+        console.log('Image type:', file.type);
+        console.log(
+          'Image URL prefix:',
+          this.selectedImage.substring(0, 30)
+        );
+        console.log(
+          'Image data length:',
+          this.selectedImage.length
+        );
 
+        this.cdr.markForCheck();
+      }
+    };
 
     reader.onerror = () => {
       this.formError = 'Unable to read the selected image.';
+      this.cdr.markForCheck();
     };
 
     reader.readAsDataURL(file);
@@ -441,7 +583,7 @@ reader.onload = () => {
     }
 
     if (
-      this.status.toLowerCase() === 'assigned' &&
+      this.status.trim().toLowerCase() === 'assigned' &&
       !this.holder.trim()
     ) {
       this.formError = 'Holder is required for an assigned asset.';
@@ -477,6 +619,8 @@ reader.onload = () => {
 
   // =========================================
   // SAVE OR UPDATE ASSET
+  // POST /api/Asset/SaveAsset
+  // POST /api/Asset/UpdateAsset
   // =========================================
 
   saveAsset(): void {
@@ -493,8 +637,9 @@ reader.onload = () => {
     const updating = this.isEditMode;
 
     this.isSaving = true;
-    this.successMessage = '';
+    this.formError = '';
     this.pageError = '';
+    this.successMessage = '';
 
     const request = updating
       ? this.assetService.updateAsset(payload)
@@ -505,51 +650,53 @@ reader.onload = () => {
         takeUntil(this.destroy$),
         finalize(() => {
           this.isSaving = false;
+          this.cdr.markForCheck();
         })
       )
       .subscribe({
         next: response => {
-          const result = this.asRecord(response);
+          console.log('Save/Update API response:', response);
 
-          if (
-            result?.['success'] === false ||
-            result?.['status'] === false
-          ) {
-            this.formError = String(
-              result['message'] ??
-              result['Message'] ??
-              'The API could not save the asset.'
+          if (!this.isApiSuccess(response)) {
+            this.formError = this.getApiMessage(
+              response,
+              updating
+                ? 'Unable to update the asset.'
+                : 'Unable to save the asset.'
             );
+
+            this.cdr.markForCheck();
             return;
           }
 
-          this.successMessage = String(
-            result?.['message'] ??
-            result?.['Message'] ??
-            (updating
-              ? 'Asset updated successfullys.'
-              : 'Asset saved successfullys.')
+          this.successMessage = this.getApiMessage(
+            response,
+            updating
+              ? 'Asset updated successfully.'
+              : 'Asset saved successfully.'
           );
 
           this.showAssetForm = false;
           this.resetForm();
-          this.loadAssets();
+
+          this.cdr.markForCheck();
+
+          // Refresh the list but preserve the success message.
+          this.loadAssets(true);
         },
+
         error: error => {
-          console.error('Save/update failed:', error);
+          console.error('Save/Update API error:', error);
 
           this.formError =
-            error?.error?.message ??
             error?.error?.Message ??
+            error?.error?.message ??
+            error?.message ??
             'Unable to save the asset. Check the API endpoint and request model.';
+
+          this.cdr.markForCheck();
         }
       });
-  }
-
-  private asRecord(value: unknown): Record<string, unknown> | null {
-    return value && typeof value === 'object'
-      ? value as Record<string, unknown>
-      : null;
   }
 
   // =========================================
@@ -557,6 +704,10 @@ reader.onload = () => {
   // =========================================
 
   editAsset(asset: AssetCard): void {
+    if (this.isSaving) {
+      return;
+    }
+
     this.resetForm();
 
     this.isEditMode = true;
@@ -573,10 +724,15 @@ reader.onload = () => {
     this.selectedImage = asset.image;
 
     this.showAssetForm = true;
+    this.pageError = '';
+    this.successMessage = '';
+
+    this.cdr.markForCheck();
   }
 
   // =========================================
   // GET ASSET BY ID
+  // GET /api/Asset/GetAssetById/{id}
   // =========================================
 
   getAssetDetails(id: string): void {
@@ -590,7 +746,11 @@ reader.onload = () => {
       .subscribe({
         next: response => {
           const result = this.asRecord(response);
-          const nested = result?.['data'] ?? result?.['asset'];
+
+          const nested =
+            result?.['data'] ??
+            result?.['asset'] ??
+            result?.['Asset'];
 
           const item = (
             nested && typeof nested === 'object'
@@ -599,17 +759,25 @@ reader.onload = () => {
           ) as ApiAsset | Record<string, unknown>;
 
           this.editAsset(this.mapApiAssetToCard(item));
+          this.cdr.markForCheck();
         },
+
         error: error => {
           console.error('Failed to retrieve asset:', error);
+
           this.pageError =
-            error?.error?.message ?? 'Unable to retrieve asset details.';
+            error?.error?.Message ??
+            error?.error?.message ??
+            'Unable to retrieve asset details.';
+
+          this.cdr.markForCheck();
         }
       });
   }
 
   // =========================================
   // DELETE ASSET
+  // GET /api/Asset/DeleteAsset/{id}
   // =========================================
 
   deleteAsset(asset: AssetCard): void {
@@ -639,34 +807,43 @@ reader.onload = () => {
         takeUntil(this.destroy$),
         finalize(() => {
           this.isDeleting = false;
+          this.cdr.markForCheck();
         })
       )
       .subscribe({
         next: response => {
-          const result = this.asRecord(response);
+          console.log('Delete API response:', response);
 
-          if (
-            result?.['success'] === false ||
-            result?.['status'] === false
-          ) {
-            this.pageError = String(
-              result['message'] ?? 'Unable to delete the asset.'
+          if (!this.isApiSuccess(response)) {
+            this.pageError = this.getApiMessage(
+              response,
+              'Unable to delete the asset.'
             );
+
+            this.cdr.markForCheck();
             return;
           }
 
-          this.successMessage = String(
-            result?.['message'] ??
+          this.successMessage = this.getApiMessage(
+            response,
             'Asset deleted successfully.'
           );
 
-          this.loadAssets();
+          this.cdr.markForCheck();
+
+          this.loadAssets(true);
         },
+
         error: error => {
-          console.error('Delete failed:', error);
+          console.error('Delete API error:', error);
+
           this.pageError =
+            error?.error?.Message ??
             error?.error?.message ??
+            error?.message ??
             'Failed to delete asset. Check the API endpoint.';
+
+          this.cdr.markForCheck();
         }
       });
   }
@@ -697,6 +874,8 @@ reader.onload = () => {
     if (this.imageInput?.nativeElement) {
       this.imageInput.nativeElement.value = '';
     }
+
+    this.cdr.markForCheck();
   }
 
   // =========================================
@@ -713,32 +892,98 @@ reader.onload = () => {
 
   applyFilters(): void {
     const search = this.searchText.trim().toLowerCase();
+    const selectedStatus = this.selectedStatus.trim().toLowerCase();
 
     this.filteredAssets = this.assets.filter(asset => {
-      const matchesSearch =
-        asset.assetId.toLowerCase().includes(search) ||
-        asset.name.toLowerCase().includes(search) ||
-        asset.category.toLowerCase().includes(search) ||
-        asset.brand.toLowerCase().includes(search) ||
-        asset.department.toLowerCase().includes(search) ||
-        asset.holder.toLowerCase().includes(search);
+      const searchableValues = [
+        asset.assetId,
+        asset.name,
+        asset.category,
+        asset.brand,
+        asset.department,
+        asset.holder
+      ];
+
+      const matchesSearch = searchableValues.some(value =>
+        String(value ?? '').toLowerCase().includes(search)
+      );
+
+      const assetStatus = String(asset.status ?? '')
+        .trim()
+        .toLowerCase();
 
       const matchesStatus =
-        this.selectedStatus === 'All' ||
-        asset.status.toLowerCase() === this.selectedStatus.toLowerCase();
+        selectedStatus === 'all' ||
+        assetStatus === selectedStatus;
 
       return matchesSearch && matchesStatus;
     });
+
+    this.cdr.markForCheck();
   }
 
+  
   // =========================================
   // VIEW ASSET HISTORY
   // =========================================
 
+  showHistory = false;
+  loadingHistory = false;
+  selectedHistoryAsset: AssetCard | null = null;
+  assetHistory: AssetHistory[] = [];
+
   viewHistory(asset: AssetCard): void {
-    // Connect this action to your history API when available.
-    this.successMessage = `Selected asset: ${asset.name}`;
+    if (!asset.assetId) {
+      this.pageError = 'Asset ID is missing.';
+      return;
+    }
+
+    // Open the history modal for the selected asset.
+    this.selectedHistoryAsset = asset;
+    this.showHistory = true;
+    this.loadingHistory = true;
+    this.assetHistory = [];
+    this.pageError = '';
+    this.successMessage = '';
+
+    // Call GET /api/AssetHistory/{assetId}.
+    this.assetHistoryService
+      .getAssetHistory(asset.assetId)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loadingHistory = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: response => {
+          this.assetHistory = response?.history ?? [];
+          this.cdr.markForCheck();
+        },
+
+        error: error => {
+          console.error('Failed to load asset history:', error);
+
+          this.pageError =
+            error?.error?.Message ??
+            error?.error?.message ??
+            error?.message ??
+            'Unable to load asset history.';
+
+          this.cdr.markForCheck();
+        }
+      });
   }
+
+  closeHistory(): void {
+    this.showHistory = false;
+    this.selectedHistoryAsset = null;
+    this.assetHistory = [];
+    this.pageError = '';
+    this.cdr.markForCheck();
+  }
+
 
   // =========================================
   // OPEN EXCEL FILE PICKER
@@ -769,6 +1014,7 @@ reader.onload = () => {
     if (!validExtension) {
       this.pageError = 'Please select an XLSX, XLS, or CSV file.';
       input.value = '';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -825,32 +1071,55 @@ reader.onload = () => {
                 row['asset_Id'] ??
                 `IMPORT-${index + 1}`
               ),
+
               image: '',
               name,
+
               category: String(
-                row['Category'] ?? row['category'] ?? ''
+                row['Category'] ??
+                row['category'] ??
+                ''
               ).trim(),
+
               brand: String(
-                row['Brand'] ?? row['brand'] ?? ''
+                row['Brand'] ??
+                row['brand'] ??
+                ''
               ).trim(),
+
               department: String(
-                row['Department'] ?? row['department'] ?? ''
+                row['Department'] ??
+                row['department'] ??
+                ''
               ).trim(),
-              cost: this.toNumber(row['Cost'] ?? row['cost']),
+
+              cost: this.toNumber(
+                row['Cost'] ??
+                row['cost']
+              ),
+
               bookValue: this.toNumber(
                 row['Book_Value'] ??
                 row['Book Value'] ??
                 row['book_Value']
               ),
+
               holder: String(
-                row['Holder'] ?? row['holder'] ?? ''
+                row['Holder'] ??
+                row['holder'] ??
+                ''
               ).trim(),
+
               status: String(
-                row['Status'] ?? row['status'] ?? 'Available'
+                row['Status'] ??
+                row['status'] ??
+                'Available'
               ).trim()
             };
           })
-          .filter((asset): asset is AssetCard => asset !== null);
+          .filter(
+            (asset): asset is AssetCard => asset !== null
+          );
 
         if (importedAssets.length === 0) {
           this.pageError =
@@ -858,7 +1127,7 @@ reader.onload = () => {
           return;
         }
 
-        // UI-only import. No SQL/API save is performed here.
+        // UI-only import. This does not save rows to SQL/API.
         this.assets = [...this.assets, ...importedAssets];
         this.applyFilters();
 
@@ -866,11 +1135,13 @@ reader.onload = () => {
           `${importedAssets.length} asset(s) imported into the UI.`;
       } catch (error) {
         console.error('Excel import failed:', error);
+
         this.pageError =
           'Unable to import the file. Check that the file format is valid.';
       } finally {
         this.isImporting = false;
         input.value = '';
+        this.cdr.markForCheck();
       }
     };
 
@@ -878,6 +1149,7 @@ reader.onload = () => {
       this.pageError = 'Failed to read the selected file.';
       this.isImporting = false;
       input.value = '';
+      this.cdr.markForCheck();
     };
 
     reader.readAsArrayBuffer(file);
@@ -898,6 +1170,7 @@ reader.onload = () => {
   exportPdf(): void {
     if (this.filteredAssets.length === 0) {
       this.pageError = 'No assets available to export.';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -911,7 +1184,11 @@ reader.onload = () => {
     pdf.text('Isuzu Asset Management - Asset Report', 14, 15);
 
     pdf.setFontSize(10);
-    pdf.text(`Total Assets: ${this.filteredAssets.length}`, 14, 22);
+    pdf.text(
+      `Total Assets: ${this.filteredAssets.length}`,
+      14,
+      22
+    );
 
     const tableData = this.filteredAssets.map(asset => [
       asset.assetId || '-',
@@ -959,6 +1236,7 @@ reader.onload = () => {
   exportExcel(): void {
     if (this.filteredAssets.length === 0) {
       this.pageError = 'No assets available to export.';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -990,9 +1268,16 @@ reader.onload = () => {
 
     const workbook = XLSX.utils.book_new();
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Assets');
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      'Assets'
+    );
 
-    XLSX.writeFile(workbook, 'isuzu-asset-report.xlsx');
+    XLSX.writeFile(
+      workbook,
+      'isuzu-asset-report.xlsx'
+    );
   }
 
   // =========================================
@@ -1000,19 +1285,25 @@ reader.onload = () => {
   // =========================================
 
   getStatusClass(status: string): string {
-    switch (status.toLowerCase()) {
+    switch (String(status ?? '').trim().toLowerCase()) {
       case 'new':
         return 'status-new';
+
       case 'assigned':
         return 'status-assigned';
+
       case 'available':
         return 'status-available';
+
       case 'maintenance':
         return 'status-maintenance';
+
       case 'disposed':
         return 'status-disposed';
+
       case 'returned':
         return 'status-returned';
+
       default:
         return 'status-default';
     }
