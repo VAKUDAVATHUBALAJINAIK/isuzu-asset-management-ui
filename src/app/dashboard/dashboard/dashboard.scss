@@ -1,0 +1,131 @@
+/* =====================================================
+   DASHBOARD MAIN LAYOUT
+   ===================================================== */
+
+.dashboard-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #f8f8f4;
+}
+
+
+/* =====================================================
+   SIDEBAR
+   ===================================================== */
+
+app-sidebar {
+  flex: 0 0 250px;
+  width: 250px;
+}
+
+
+/* =====================================================
+   MAIN DASHBOARD
+   ===================================================== */
+
+.dashboard-content {
+  flex: 1;
+  min-width: 0;
+  width: calc(100% - 250px);
+  overflow-x: hidden;
+}
+
+
+/* =====================================================
+   DASHBOARD BODY
+   ===================================================== */
+
+.dashboard-body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+
+  padding: 20px 24px 40px;
+
+  overflow-x: hidden;
+}
+
+
+/* =====================================================
+   CHILD COMPONENTS
+   ===================================================== */
+
+app-summary-cards,
+app-quick-actions,
+app-charts {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   SPACING
+   ===================================================== */
+
+app-summary-cards {
+  margin-bottom: 20px;
+}
+
+app-quick-actions {
+  margin-bottom: 20px;
+}
+
+app-charts {
+  margin-bottom: 20px;
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width: 991px) {
+
+  app-sidebar {
+    flex: 0 0 220px;
+    width: 220px;
+  }
+
+  .dashboard-content {
+    width: calc(100% - 220px);
+  }
+
+  .dashboard-body {
+    padding: 18px;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 767px) {
+
+  .dashboard-layout {
+    display: block;
+  }
+
+  app-sidebar {
+    width: 100%;
+    display: block;
+  }
+
+  .dashboard-content {
+    width: 100%;
+    display: block;
+  }
+
+  .dashboard-body {
+    width: 100%;
+    padding: 15px;
+  }
+
+}

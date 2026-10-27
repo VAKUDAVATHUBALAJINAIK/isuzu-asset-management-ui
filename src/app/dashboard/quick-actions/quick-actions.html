@@ -1,0 +1,59 @@
+<section class="quick-actions-section">
+
+  <!-- HEADER -->
+  <div class="quick-actions-header">
+
+    <div class="quick-actions-heading">
+
+      <div class="quick-actions-main-icon">
+        ⚡
+      </div>
+
+      <div class="quick-actions-title">
+
+        <h2>Quick Actions</h2>
+
+        <p>
+          Frequently used asset management actions
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- SINGLE ROW -->
+  <div class="quick-actions-list">
+
+    @for (action of quickActions; track action.title) {
+
+      <button
+        type="button"
+        class="quick-action-card"
+        (click)="onActionClick(action)"
+        [attr.aria-label]="action.title">
+
+        <!-- LEFT ICON -->
+        <span class="action-icon">
+          {{ action.icon }}
+        </span>
+
+        <!-- RIGHT TEXT -->
+        <span class="action-title">
+          {{ action.title }}
+        </span>
+
+        <!-- OPTIONAL ARROW -->
+        <span class="action-arrow">
+          →
+        </span>
+
+      </button>
+
+    }
+
+  </div>
+
+</section>

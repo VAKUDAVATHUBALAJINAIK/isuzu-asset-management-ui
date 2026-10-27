@@ -1,0 +1,751 @@
+<div class="signup-page">
+
+  <!-- =====================================
+       ANIMATED BACKGROUND
+  ====================================== -->
+
+  <div class="background-shape shape-one"></div>
+
+  <div class="background-shape shape-two"></div>
+
+  <div class="background-shape shape-three"></div>
+
+
+  <!-- =====================================
+       MAIN CONTAINER
+  ====================================== -->
+
+  <div class="signup-container">
+
+
+    <!-- =====================================
+         LEFT INFORMATION
+    ====================================== -->
+
+    <section class="signup-info">
+
+
+      <!-- BRAND -->
+
+      <div class="brand">
+
+        <div class="brand-icon">
+          AT
+        </div>
+
+        <span>
+          AssetTrack
+        </span>
+
+      </div>
+
+
+      <!-- INFORMATION -->
+
+      <div class="info-content">
+
+        <span class="badge">
+          ASSET MANAGEMENT
+        </span>
+
+
+        <h1>
+
+          Create your
+
+          <span>
+            account.
+          </span>
+
+        </h1>
+
+
+        <p>
+
+          Join the asset management platform
+          and manage company resources securely.
+
+        </p>
+
+
+        <!-- FEATURES -->
+
+        <div class="features">
+
+
+          <div class="feature">
+
+            <div class="feature-icon">
+              ✓
+            </div>
+
+            <span>
+              Secure asset management
+            </span>
+
+          </div>
+
+
+          <div class="feature">
+
+            <div class="feature-icon">
+              ✓
+            </div>
+
+            <span>
+              Employee asset tracking
+            </span>
+
+          </div>
+
+
+          <div class="feature">
+
+            <div class="feature-icon">
+              ✓
+            </div>
+
+            <span>
+              Centralized management
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================
+         SIGNUP SECTION
+    ====================================== -->
+
+    <section class="signup-section">
+
+      <div class="signup-card">
+
+
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+
+        <div class="signup-header">
+
+          <h2>
+            Create account
+          </h2>
+
+          <p>
+            Register your AssetTrack account
+          </p>
+
+        </div>
+
+
+        <!-- =====================================
+             ROLE SELECTION
+        ====================================== -->
+
+        <div class="role-grid">
+
+
+          <!-- =================================
+               EMPLOYEE
+          ================================== -->
+
+          <button
+            type="button"
+            class="role-card"
+            [class.active]="
+              registerForm.role === 'employee'
+            "
+            (click)="
+              selectRole('employee')
+            ">
+
+            <span class="role-icon">
+              👤
+            </span>
+
+            <span>
+
+              <strong>
+                Employee
+              </strong>
+
+              <small>
+                Employee account
+              </small>
+
+            </span>
+
+          </button>
+
+
+          <!-- =================================
+               ADMIN
+          ================================== -->
+
+          <button
+            type="button"
+            class="role-card"
+            [class.active]="
+              registerForm.role === 'admin'
+            "
+            (click)="
+              selectRole('admin')
+            ">
+
+            <span class="role-icon">
+              🛡️
+            </span>
+
+            <span>
+
+              <strong>
+                Admin
+              </strong>
+
+              <small>
+                Administrator account
+              </small>
+
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- =====================================
+             REGISTRATION FORM
+        ====================================== -->
+
+        <form
+          #signupFormRef="ngForm"
+          (ngSubmit)="register()"
+          novalidate>
+
+
+          <!-- =====================================
+               FULL NAME
+          ====================================== -->
+
+          <div class="form-group">
+
+            <label for="fullName">
+              Full name
+            </label>
+
+            <input
+              id="fullName"
+              type="text"
+              name="fullName"
+              [(ngModel)]="registerForm.fullName"
+              #fullName="ngModel"
+              placeholder="Enter your full name"
+              autocomplete="name"
+              required
+              minlength="3"
+              [class.invalid]="
+                fullName.invalid &&
+                (fullName.touched || submitted)
+              "
+            />
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                fullName.invalid &&
+                (fullName.touched || submitted)
+              ">
+
+              <span
+                *ngIf="
+                  fullName.errors?.['required']
+                ">
+
+                Full name is required
+
+              </span>
+
+
+              <span
+                *ngIf="
+                  fullName.errors?.['minlength']
+                ">
+
+                Name must contain at least
+                3 characters
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+               EMAIL
+          ====================================== -->
+
+          <div class="form-group">
+
+            <label for="signupEmail">
+              Email address
+            </label>
+
+            <input
+              id="signupEmail"
+              type="email"
+              name="email"
+              [(ngModel)]="registerForm.email"
+              #email="ngModel"
+              placeholder="Enter your email"
+              autocomplete="email"
+              required
+              email
+              [class.invalid]="
+                email.invalid &&
+                (email.touched || submitted)
+              "
+            />
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                email.invalid &&
+                (email.touched || submitted)
+              ">
+
+              <span
+                *ngIf="
+                  email.errors?.['required']
+                ">
+
+                Email is required
+
+              </span>
+
+
+              <span
+                *ngIf="
+                  email.errors?.['email']
+                ">
+
+                Enter a valid email address
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+               EMPLOYEE ID
+               EMPLOYEE ONLY
+          ====================================== -->
+
+          <div
+            class="form-group"
+            *ngIf="
+              registerForm.role === 'employee'
+            ">
+
+            <label for="employeeId">
+              Employee ID
+            </label>
+
+            <input
+              id="employeeId"
+              type="text"
+              name="employeeId"
+              [(ngModel)]="registerForm.employeeId"
+              #employeeId="ngModel"
+              placeholder="Enter employee ID"
+              required
+              [class.invalid]="
+                employeeId.invalid &&
+                (employeeId.touched || submitted)
+              "
+            />
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                employeeId.invalid &&
+                (employeeId.touched || submitted)
+              ">
+
+              Employee ID is required
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+               ADMIN CODE
+               ADMIN ONLY
+          ====================================== -->
+
+          <div
+            class="form-group"
+            *ngIf="
+              registerForm.role === 'admin'
+            ">
+
+            <label for="adminCode">
+              Admin registration code
+            </label>
+
+            <input
+              id="adminCode"
+              type="text"
+              name="adminCode"
+              [(ngModel)]="registerForm.adminCode"
+              #adminCode="ngModel"
+              placeholder="Enter admin registration code"
+              required
+              [class.invalid]="
+                adminCode.invalid &&
+                (adminCode.touched || submitted)
+              "
+            />
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                adminCode.invalid &&
+                (adminCode.touched || submitted)
+              ">
+
+              Admin registration code is required
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+               PASSWORD
+          ====================================== -->
+
+          <div class="form-group">
+
+            <label for="signupPassword">
+              Password
+            </label>
+
+
+            <div class="password-wrapper">
+
+              <input
+                id="signupPassword"
+                [type]="
+                  showPassword
+                    ? 'text'
+                    : 'password'
+                "
+                name="password"
+                [(ngModel)]="registerForm.password"
+                #password="ngModel"
+                placeholder="Create a password"
+                autocomplete="new-password"
+                required
+                minlength="8"
+                [class.invalid]="
+                  password.invalid &&
+                  (password.touched || submitted)
+                "
+              />
+
+
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePassword()">
+
+                {{
+                  showPassword
+                    ? 'Hide'
+                    : 'Show'
+                }}
+
+              </button>
+
+            </div>
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                password.invalid &&
+                (password.touched || submitted)
+              ">
+
+              <span
+                *ngIf="
+                  password.errors?.['required']
+                ">
+
+                Password is required
+
+              </span>
+
+
+              <span
+                *ngIf="
+                  password.errors?.['minlength']
+                ">
+
+                Password must contain at least
+                8 characters
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+               CONFIRM PASSWORD
+          ====================================== -->
+
+          <div class="form-group">
+
+            <label for="confirmPassword">
+              Confirm password
+            </label>
+
+
+            <div class="password-wrapper">
+
+              <input
+                id="confirmPassword"
+                [type]="
+                  showConfirmPassword
+                    ? 'text'
+                    : 'password'
+                "
+                name="confirmPassword"
+                [(ngModel)]="
+                  registerForm.confirmPassword
+                "
+                #confirmPassword="ngModel"
+                placeholder="Confirm your password"
+                autocomplete="new-password"
+                required
+                [class.invalid]="
+                  (
+                    confirmPassword.invalid ||
+                    passwordMismatch
+                  ) &&
+                  (
+                    confirmPassword.touched ||
+                    submitted
+                  )
+                "
+              />
+
+
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="
+                  toggleConfirmPassword()
+                ">
+
+                {{
+                  showConfirmPassword
+                    ? 'Hide'
+                    : 'Show'
+                }}
+
+              </button>
+
+            </div>
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                (
+                  confirmPassword.invalid ||
+                  passwordMismatch
+                ) &&
+                (
+                  confirmPassword.touched ||
+                  submitted
+                )
+              ">
+
+              <span
+                *ngIf="
+                  confirmPassword.errors?.['required']
+                ">
+
+                Confirm password is required
+
+              </span>
+
+
+              <span
+                *ngIf="
+                  !confirmPassword.errors?.['required'] &&
+                  passwordMismatch
+                ">
+
+                Passwords do not match
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+               SHOW CONFIRM PASSWORD
+          ====================================== -->
+
+          <label class="remember">
+
+            <input
+              type="checkbox"
+              [checked]="showConfirmPassword"
+              (change)="toggleConfirmPassword()"
+            />
+
+            <span>
+              Show confirm password
+            </span>
+
+          </label>
+
+
+          <!-- =====================================
+               TERMS
+          ====================================== -->
+
+          <label class="terms">
+
+            <input
+              type="checkbox"
+              name="terms"
+              [(ngModel)]="registerForm.terms"
+              #terms="ngModel"
+              required
+            />
+
+            <span>
+
+              I agree to the
+
+              <a href="javascript:void(0)">
+                terms and conditions
+              </a>
+
+            </span>
+
+          </label>
+
+
+          <!-- TERMS ERROR -->
+
+          <div
+            class="error-message"
+            *ngIf="
+              submitted &&
+              !registerForm.terms
+            ">
+
+            You must accept the terms
+            and conditions
+
+          </div>
+
+
+          <!-- SERVER ERROR -->
+
+          <div
+            class="server-error"
+            *ngIf="serverError">
+
+            {{ serverError }}
+
+          </div>
+
+
+          <!-- =====================================
+               REGISTER BUTTON
+          ====================================== -->
+
+          <button
+            type="submit"
+            class="register-button"
+            [disabled]="isLoading">
+
+            <span
+              *ngIf="!isLoading">
+
+              Create account
+
+            </span>
+
+
+            <span
+              *ngIf="isLoading">
+
+              Creating account...
+
+            </span>
+
+          </button>
+
+        </form>
+
+
+        <!-- =====================================
+             LOGIN
+        ====================================== -->
+
+        <div class="login-text">
+
+          Already have an account?
+
+          <a
+            routerLink="/auth/login">
+
+            Sign in
+
+          </a>
+
+        </div>
+
+
+        <!-- =====================================
+             SECURITY
+        ====================================== -->
+
+        <div class="security-note">
+
+          🔒 Your information is securely managed
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</div>

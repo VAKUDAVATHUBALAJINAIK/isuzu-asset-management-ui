@@ -1,0 +1,969 @@
+/* =========================================================
+   QUICK ACTIONS SECTION
+   ========================================================= */
+
+.quick-actions-section {
+  width: 100%;
+  margin-top: 22px;
+  padding: 18px 20px;
+
+  box-sizing: border-box;
+
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid rgba(218, 190, 75, 0.28);
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffef9 0%,
+      #fffbea 45%,
+      #fff5cf 100%
+    );
+
+  box-shadow:
+    0 4px 10px rgba(80, 70, 20, 0.04),
+    0 12px 28px rgba(80, 70, 20, 0.06);
+}
+
+
+/* =========================================================
+   DECORATIVE BACKGROUND
+   ========================================================= */
+
+.quick-actions-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 220px;
+  height: 220px;
+
+  top: -120px;
+  right: -90px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 215, 70, 0.20),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.quick-actions-header {
+  position: relative;
+  z-index: 2;
+
+  margin-bottom: 15px;
+}
+
+
+.quick-actions-heading {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+/* =========================================================
+   MAIN LIGHTNING ICON
+   ========================================================= */
+
+.quick-actions-main-icon {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffdf0,
+      #f5e6a0
+    );
+
+  border:
+    1px solid rgba(190, 160, 45, 0.22);
+
+  font-size: 16px;
+
+  box-shadow:
+    0 3px 8px rgba(90, 70, 10, 0.08);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+
+.quick-actions-section:hover
+.quick-actions-main-icon {
+  transform:
+    scale(1.06)
+    rotate(3deg);
+
+  box-shadow:
+    0 6px 13px rgba(90, 70, 10, 0.12);
+}
+
+
+/* =========================================================
+   HEADER TITLE
+   ========================================================= */
+
+.quick-actions-title h2 {
+  margin: 0;
+
+  color: #202020;
+
+  font-size: 16px;
+
+  font-weight: 750;
+
+  line-height: 1.2;
+}
+
+
+.quick-actions-title p {
+  margin: 3px 0 0;
+
+  color: #77715d;
+
+  font-size: 11px;
+
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   ACTION LIST
+   SINGLE HORIZONTAL ROW
+   ========================================================= */
+
+.quick-actions-list {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: row;
+
+  flex-wrap: nowrap;
+
+  align-items: stretch;
+
+  gap: 12px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding: 2px 2px 8px;
+
+  box-sizing: border-box;
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #d8c77c
+    transparent;
+}
+
+
+/* =========================================================
+   SCROLLBAR - CHROME / EDGE
+   ========================================================= */
+
+.quick-actions-list::-webkit-scrollbar {
+  height: 5px;
+}
+
+
+.quick-actions-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.quick-actions-list::-webkit-scrollbar-thumb {
+  background: #d8c77c;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   QUICK ACTION CARD
+   ICON LEFT + TEXT RIGHT
+   ========================================================= */
+
+.quick-action-card {
+  position: relative;
+
+  flex: 1 1 0;
+
+  /*
+    Important:
+    Prevents Maintenance from wrapping.
+  */
+  min-width: 125px;
+
+  height: 62px;
+
+  padding: 8px 11px;
+
+  box-sizing: border-box;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  gap: 8px;
+
+  white-space: nowrap;
+
+  border:
+    1px solid rgba(201, 180, 90, 0.25);
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fffbea 100%
+    );
+
+  color: #353229;
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 7px rgba(80, 70, 20, 0.05);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+
+/* =========================================================
+   CARD DECORATIVE GLOW
+   ========================================================= */
+
+.quick-action-card::before {
+  content: "";
+
+  position: absolute;
+
+  width: 55px;
+  height: 55px;
+
+  top: -28px;
+  right: -18px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 215, 70, 0.18),
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  transition:
+    transform 0.4s ease;
+}
+
+
+/* =========================================================
+   ACTION ICON
+   ========================================================= */
+
+.action-icon {
+  width: 28px;
+  height: 28px;
+
+  flex: 0 0 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffef7,
+      #f4e8bd
+    );
+
+  border:
+    1px solid rgba(190, 165, 70, 0.18);
+
+  font-size: 13px;
+
+  box-shadow:
+    0 2px 5px rgba(80, 70, 20, 0.05);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+/* =========================================================
+   ACTION TEXT
+   ========================================================= */
+
+.action-title {
+  flex: 1;
+
+  min-width: 0;
+
+  color: #38352d;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  text-align: left;
+
+  /*
+    Keep text in ONE LINE
+  */
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   ARROW
+   ========================================================= */
+
+.action-arrow {
+  display: none;
+
+  flex-shrink: 0;
+
+  margin-left: auto;
+
+  font-size: 10px;
+
+  color: #77715d;
+}
+
+
+/* =========================================================
+   CARD HOVER
+   ========================================================= */
+
+.quick-action-card:hover {
+
+  transform:
+    translateY(-4px);
+
+  border-color:
+    rgba(190, 160, 45, 0.45);
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fff6d3 100%
+    );
+
+  box-shadow:
+    0 7px 15px rgba(80, 70, 20, 0.10),
+    0 12px 22px rgba(80, 70, 20, 0.05);
+}
+
+
+.quick-action-card:hover::before {
+  transform:
+    scale(1.5);
+}
+
+
+.quick-action-card:hover .action-icon {
+
+  transform:
+    scale(1.08)
+    rotate(3deg);
+
+  box-shadow:
+    0 4px 9px rgba(80, 70, 20, 0.10);
+}
+
+
+/* =========================================================
+   CLICK EFFECT
+   ========================================================= */
+
+.quick-action-card:active {
+
+  transform:
+    translateY(-1px)
+    scale(0.98);
+}
+
+
+/* =========================================================
+   KEYBOARD ACCESSIBILITY
+   ========================================================= */
+
+.quick-action-card:focus-visible {
+
+  outline:
+    2px solid #8d7620;
+
+  outline-offset:
+    3px;
+}
+
+
+/* =========================================================
+   CARD ENTRY ANIMATION
+   ========================================================= */
+
+.quick-action-card {
+
+  animation:
+    quickActionEnter
+    0.45s
+    cubic-bezier(.2, .8, .2, 1)
+    both;
+}
+
+
+.quick-action-card:nth-child(1) {
+  animation-delay: 0.04s;
+}
+
+
+.quick-action-card:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+
+.quick-action-card:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+
+.quick-action-card:nth-child(4) {
+  animation-delay: 0.16s;
+}
+
+
+.quick-action-card:nth-child(5) {
+  animation-delay: 0.20s;
+}
+
+
+.quick-action-card:nth-child(6) {
+  animation-delay: 0.24s;
+}
+
+
+.quick-action-card:nth-child(7) {
+  animation-delay: 0.28s;
+}
+
+
+.quick-action-card:nth-child(8) {
+  animation-delay: 0.32s;
+}
+
+
+@keyframes quickActionEnter {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   1400px+
+   ========================================================= */
+
+@media (min-width: 1400px) {
+
+  .quick-actions-section {
+    padding: 20px 22px;
+  }
+
+
+  .quick-actions-list {
+    gap: 14px;
+  }
+
+
+  .quick-action-card {
+
+    min-width: 130px;
+
+    height: 64px;
+
+    padding:
+      8px 12px;
+  }
+
+
+  .action-icon {
+
+    width: 29px;
+    height: 29px;
+
+    flex-basis: 29px;
+
+    font-size: 13px;
+  }
+
+
+  .action-title {
+    font-size: 10.5px;
+  }
+
+}
+
+
+/* =========================================================
+   LAPTOP
+   1200px - 1399px
+   ========================================================= */
+
+@media (max-width: 1399px) {
+
+  .quick-actions-list {
+    gap: 10px;
+  }
+
+
+  .quick-action-card {
+
+    min-width: 125px;
+
+    height: 60px;
+
+    padding:
+      7px 9px;
+
+    gap: 7px;
+  }
+
+
+  .action-icon {
+
+    width: 27px;
+    height: 27px;
+
+    flex-basis: 27px;
+
+    font-size: 12px;
+  }
+
+
+  .action-title {
+    font-size: 10px;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   768px - 991px
+   ========================================================= */
+
+@media (max-width: 991px) {
+
+  .quick-actions-section {
+
+    padding:
+      16px;
+  }
+
+
+  .quick-actions-list {
+
+    gap: 9px;
+
+    overflow-x: auto;
+
+    /*
+      Cards remain in ONE row.
+    */
+    flex-wrap: nowrap;
+  }
+
+
+  .quick-action-card {
+
+    /*
+      Fixed width on tablet
+      allows horizontal scrolling.
+    */
+
+    flex:
+      0 0 125px;
+
+    min-width: 125px;
+
+    height: 60px;
+  }
+
+
+  .action-title {
+    font-size: 9.5px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   <= 767px
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  .quick-actions-section {
+
+    margin-top: 16px;
+
+    padding:
+      14px;
+
+    border-radius:
+      14px;
+  }
+
+
+  .quick-actions-header {
+
+    margin-bottom:
+      12px;
+  }
+
+
+  .quick-actions-main-icon {
+
+    width: 31px;
+    height: 31px;
+
+    font-size: 14px;
+  }
+
+
+  .quick-actions-title h2 {
+
+    font-size:
+      15px;
+  }
+
+
+  .quick-actions-title p {
+
+    font-size:
+      10px;
+  }
+
+
+  .quick-actions-list {
+
+    gap:
+      8px;
+
+    overflow-x:
+      auto;
+
+    /*
+      Single row on mobile.
+    */
+    flex-wrap:
+      nowrap;
+
+    padding-bottom:
+      7px;
+  }
+
+
+  .quick-action-card {
+
+    flex:
+      0 0 125px;
+
+    min-width:
+      125px;
+
+    height:
+      58px;
+
+    padding:
+      7px 8px;
+
+    gap:
+      7px;
+  }
+
+
+  .action-icon {
+
+    width:
+      25px;
+
+    height:
+      25px;
+
+    flex-basis:
+      25px;
+
+    font-size:
+      12px;
+  }
+
+
+  .action-title {
+
+    font-size:
+      9px;
+
+    white-space:
+      nowrap;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   <= 575px
+   ========================================================= */
+
+@media (max-width: 575px) {
+
+  .quick-actions-section {
+
+    padding:
+      12px;
+
+    border-radius:
+      12px;
+  }
+
+
+  .quick-actions-list {
+
+    gap:
+      7px;
+  }
+
+
+  .quick-action-card {
+
+    flex:
+      0 0 120px;
+
+    min-width:
+      120px;
+
+    height:
+      56px;
+
+    padding:
+      6px 7px;
+
+    gap:
+      6px;
+
+    border-radius:
+      8px;
+  }
+
+
+  .action-icon {
+
+    width:
+      23px;
+
+    height:
+      23px;
+
+    flex-basis:
+      23px;
+
+    font-size:
+      11px;
+  }
+
+
+  .action-title {
+
+    font-size:
+      8.5px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   <= 380px
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .quick-actions-section {
+
+    padding:
+      10px;
+  }
+
+
+  .quick-action-card {
+
+    flex:
+      0 0 112px;
+
+    min-width:
+      112px;
+
+    height:
+      54px;
+
+    padding:
+      6px;
+  }
+
+
+  .action-icon {
+
+    width:
+      22px;
+
+    height:
+      22px;
+
+    flex-basis:
+      22px;
+
+    font-size:
+      10px;
+  }
+
+
+  .action-title {
+
+    font-size:
+      8px;
+  }
+
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) {
+
+  .quick-action-card:hover {
+
+    transform:
+      none;
+
+    box-shadow:
+      0 3px 7px rgba(80, 70, 20, 0.05);
+  }
+
+
+  .quick-action-card:hover .action-icon {
+
+    transform:
+      none;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .quick-action-card,
+  .action-icon,
+  .quick-actions-main-icon {
+
+    animation:
+      none;
+
+    transition:
+      none;
+  }
+
+
+  .quick-action-card:hover {
+
+    transform:
+      none;
+  }
+
+}

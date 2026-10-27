@@ -1,0 +1,357 @@
+<section class="recent-assets-section">
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <div class="recent-assets-header">
+
+    <div class="recent-assets-heading">
+
+      <div class="recent-assets-main-icon">
+        📋
+      </div>
+
+      <div class="recent-assets-title">
+
+        <span class="section-label">
+          ASSET MANAGEMENT
+        </span>
+
+        <h2>
+          Recent Assets
+        </h2>
+
+        <p>
+          Recently added and updated assets
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="view-all-button"
+      (click)="viewAllAssets()">
+
+      View All
+
+      <span class="arrow">
+        →
+      </span>
+
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       DESKTOP / TABLET TABLE
+       ===================================================== -->
+
+  <div class="assets-table-wrapper">
+
+    <table class="assets-table">
+
+      <thead>
+
+        <tr>
+
+          <th>
+            Asset
+          </th>
+
+          <th>
+            Category
+          </th>
+
+          <th>
+            Assigned To
+          </th>
+
+          <th>
+            Location
+          </th>
+
+          <th>
+            Status
+          </th>
+
+          <th>
+            Updated
+          </th>
+
+          <th>
+            Action
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        @for (
+          asset of recentAssets;
+          track asset.assetCode
+        ) {
+
+          <tr
+            (click)="viewAsset(asset)"
+            class="asset-row">
+
+
+            <!-- ASSET -->
+
+            <td>
+
+              <div class="asset-info">
+
+                <div class="asset-icon">
+
+                  {{ asset.icon }}
+
+                </div>
+
+                <div class="asset-details">
+
+                  <strong>
+                    {{ asset.assetName }}
+                  </strong>
+
+                  <span>
+                    {{ asset.assetCode }}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- CATEGORY -->
+
+            <td>
+
+              <span class="category-text">
+                {{ asset.category }}
+              </span>
+
+            </td>
+
+
+            <!-- EMPLOYEE -->
+
+            <td>
+
+              <span class="employee-name">
+                {{ asset.employee }}
+              </span>
+
+            </td>
+
+
+            <!-- LOCATION -->
+
+            <td>
+
+              <span class="location-text">
+
+                📍 {{ asset.location }}
+
+              </span>
+
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td>
+
+              <span
+                class="status-badge"
+                [class]="asset.statusClass">
+
+                <span class="status-dot"></span>
+
+                {{ asset.status }}
+
+              </span>
+
+            </td>
+
+
+            <!-- UPDATED -->
+
+            <td>
+
+              <span class="updated-text">
+                {{ asset.lastUpdated }}
+              </span>
+
+            </td>
+
+
+            <!-- ACTION -->
+
+            <td>
+
+              <button
+                type="button"
+                class="asset-action"
+                (click)="$event.stopPropagation(); viewAsset(asset)"
+                aria-label="View asset">
+
+                →
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+
+  <!-- =====================================================
+       MOBILE CARDS
+       ===================================================== -->
+
+  <div class="mobile-assets-list">
+
+    @for (
+      asset of recentAssets;
+      track asset.assetCode
+    ) {
+
+      <button
+        type="button"
+        class="mobile-asset-card"
+        (click)="viewAsset(asset)">
+
+
+        <div class="mobile-asset-top">
+
+          <div class="mobile-asset-left">
+
+            <div class="mobile-asset-icon">
+              {{ asset.icon }}
+            </div>
+
+            <div>
+
+              <h3>
+                {{ asset.assetName }}
+              </h3>
+
+              <span>
+                {{ asset.assetCode }}
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <span
+            class="status-badge"
+            [class]="asset.statusClass">
+
+            <span class="status-dot"></span>
+
+            {{ asset.status }}
+
+          </span>
+
+        </div>
+
+
+        <div class="mobile-asset-details">
+
+          <div>
+
+            <small>
+              CATEGORY
+            </small>
+
+            <span>
+              {{ asset.category }}
+            </span>
+
+          </div>
+
+
+          <div>
+
+            <small>
+              ASSIGNED TO
+            </small>
+
+            <span>
+              {{ asset.employee }}
+            </span>
+
+          </div>
+
+
+          <div>
+
+            <small>
+              LOCATION
+            </small>
+
+            <span>
+              📍 {{ asset.location }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="mobile-asset-footer">
+
+          <span>
+            {{ asset.lastUpdated }}
+          </span>
+
+          <span>
+            View →
+          </span>
+
+        </div>
+
+      </button>
+
+    }
+
+  </div>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <div class="recent-assets-footer">
+
+    <span>
+      Showing {{ recentAssets.length }} recent assets
+    </span>
+
+    <span class="asset-count">
+      Total Assets: 20
+    </span>
+
+  </div>
+
+</section>

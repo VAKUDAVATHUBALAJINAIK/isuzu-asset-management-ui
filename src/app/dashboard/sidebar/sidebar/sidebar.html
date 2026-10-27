@@ -1,0 +1,166 @@
+
+<aside class="sidebar">
+
+  <!-- SIDEBAR HEADER -->
+  <div class="sidebar-header">
+
+    <h2>ISUZU</h2>
+
+    <p>Enterprise Asset Suite</p>
+
+    <hr>
+
+  </div>
+
+
+  <!-- SIDEBAR MENU -->
+  <nav class="sidebar-menu">
+
+
+    <!-- DASHBOARD -->
+    <a
+      class="menu-item"
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <span>Dashboard</span>
+    </a>
+
+
+    <!-- ASSET -->
+    <div class="menu-group">
+
+      <!-- Asset Main Menu -->
+      <div
+        class="menu-item asset-menu"
+        [class.active]="isAssetMenuOpen"
+        (click)="toggleAssetMenu()"
+      >
+
+        <span>Asset</span>
+
+        <span
+          class="arrow"
+          [class.rotate]="isAssetMenuOpen"
+        >
+          ›
+        </span>
+
+      </div>
+
+
+      <!-- ASSET SUB MENU -->
+      <div
+        class="submenu"
+        *ngIf="isAssetMenuOpen"
+      >
+
+        <a
+          class="menu-item submenu-item"
+          routerLink="/asset/entry"
+          routerLinkActive="active"
+          (click)="debugAssetEntry()"
+        >
+          <span>Asset Entry</span>
+        </a>
+
+        <a
+          class="menu-item submenu-item"
+          routerLink="/asset/assignment"
+          routerLinkActive="active"
+        >
+          <span>Asset Assignment</span>
+        </a>
+
+        <a
+          class="menu-item submenu-item"
+          routerLink="/asset/return"
+          routerLinkActive="active"
+        >
+          <span>Asset Return</span>
+        </a>
+
+        <a
+          class="menu-item submenu-item"
+          routerLink="/asset/transfer"
+          routerLinkActive="active"
+        >
+          <span>Asset Transfer</span>
+        </a>
+
+        <a
+          class="menu-item submenu-item"
+          routerLink="/asset/maintenance"
+          routerLinkActive="active"
+        >
+          <span>Asset Maintenance</span>
+        </a>
+
+        <a
+          class="menu-item submenu-item"
+          routerLink="/asset/disposal"
+          routerLinkActive="active"
+        >
+          <span>Asset Disposal</span>
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- EMPLOYEE -->
+    <a
+      class="menu-item"
+      routerLink="/employee"
+      routerLinkActive="active"
+    >
+      <span>Employee</span>
+    </a>
+
+
+    <!-- VENDOR -->
+    <a
+      class="menu-item"
+      routerLink="/vendor"
+      routerLinkActive="active"
+    >
+      <span>Vendor</span>
+    </a>
+
+
+    <!-- EXPENSE -->
+    <a
+      class="menu-item"
+      routerLink="/expense"
+      routerLinkActive="active"
+    >
+      <span>Expense</span>
+    </a>
+
+
+    <!-- REPORTS -->
+    <a
+      class="menu-item"
+      routerLink="/reports"
+      routerLinkActive="active"
+    >
+      <span>Reports</span>
+    </a>
+
+
+    <!-- SETTINGS -->
+    <a
+      class="menu-item"
+      routerLink="/settings"
+      routerLinkActive="active"
+    >
+      <span>Settings</span>
+    </a>
+
+
+  </nav>
+
+</aside>
+```

@@ -1,0 +1,499 @@
+<div class="login-page">
+
+  <!-- Animated background -->
+  <div class="background-shape shape-one"></div>
+  <div class="background-shape shape-two"></div>
+  <div class="background-shape shape-three"></div>
+
+
+  <!-- Main Container -->
+  <div class="login-container">
+
+
+    <!-- =====================================
+         LEFT INFORMATION
+    ====================================== -->
+
+    <section class="login-info">
+
+      <!-- Brand -->
+
+      <div class="brand">
+
+        <div class="brand-icon">
+          AT
+        </div>
+
+        <span>
+          AssetTrack
+        </span>
+
+      </div>
+
+
+      <!-- Information -->
+
+      <div class="info-content">
+
+        <span class="badge">
+          ASSET MANAGEMENT
+        </span>
+
+        <h1>
+          Manage your assets
+          <span>smarter.</span>
+        </h1>
+
+        <p>
+          Track, manage and monitor company
+          assets from one secure platform.
+        </p>
+
+
+        <!-- Features -->
+
+        <div class="features">
+
+          <div class="feature">
+
+            <div class="feature-icon">
+              ✓
+            </div>
+
+            <span>
+              Asset tracking
+            </span>
+
+          </div>
+
+
+          <div class="feature">
+
+            <div class="feature-icon">
+              ✓
+            </div>
+
+            <span>
+              Employee management
+            </span>
+
+          </div>
+
+
+          <div class="feature">
+
+            <div class="feature-icon">
+              ✓
+            </div>
+
+            <span>
+              Audit & activity history
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         LOGIN SECTION
+    ====================================== -->
+
+    <section class="login-section">
+
+      <div class="login-card">
+
+
+        <!-- Header -->
+
+        <div class="login-header">
+
+          <h2>
+            Welcome back
+          </h2>
+
+          <p>
+            Sign in to your account
+          </p>
+
+        </div>
+
+
+
+        <!-- =====================================
+             ROLE SELECTION
+        ====================================== -->
+
+        <div class="role-grid">
+
+
+          <!-- Employee -->
+
+          <button
+            type="button"
+            class="role-card"
+            [class.active]="
+              loginForm.role === 'employee'
+            "
+            (click)="selectRole('employee')">
+
+            <span class="role-icon">
+              👤
+            </span>
+
+            <span>
+
+              <strong>
+                Employee
+              </strong>
+
+              <small>
+                Employee portal
+              </small>
+
+            </span>
+
+          </button>
+
+
+
+          <!-- Admin -->
+
+          <button
+            type="button"
+            class="role-card"
+            [class.active]="
+              loginForm.role === 'admin'
+            "
+            (click)="selectRole('admin')">
+
+            <span class="role-icon">
+              🛡️
+            </span>
+
+            <span>
+
+              <strong>
+                Admin
+              </strong>
+
+              <small>
+                Administration
+              </small>
+
+            </span>
+
+          </button>
+
+        </div>
+
+
+
+        <!-- =====================================
+             LOGIN FORM
+        ====================================== -->
+
+        <form
+          #loginFormRef="ngForm"
+          (ngSubmit)="login()"
+          novalidate>
+
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+
+            <label for="loginEmail">
+              Email address
+            </label>
+
+            <input
+              id="loginEmail"
+              type="email"
+              name="email"
+              [(ngModel)]="loginForm.email"
+              #email="ngModel"
+              placeholder="Enter your email"
+              autocomplete="email"
+              required
+              email
+              [class.invalid]="
+                email.invalid &&
+                (email.touched || submitted)
+              "
+            />
+
+            <div
+              class="error-message"
+              *ngIf="
+                email.invalid &&
+                (email.touched || submitted)
+              ">
+
+              <span
+                *ngIf="
+                  email.errors?.['required']
+                ">
+
+                Email is required
+
+              </span>
+
+              <span
+                *ngIf="
+                  email.errors?.['email']
+                ">
+
+                Enter a valid email address
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- PASSWORD -->
+
+          <div class="form-group">
+
+          <div class="label-row">
+
+  <label for="loginPassword">
+    Password
+  </label>
+
+  <a
+    routerLink="/auth/forgot-password">
+
+    Forgot password?
+
+  </a>
+
+</div>
+
+
+            <div class="password-wrapper">
+
+              <input
+                id="loginPassword"
+                [type]="
+                  showPassword
+                    ? 'text'
+                    : 'password'
+                "
+                name="password"
+                [(ngModel)]="loginForm.password"
+                #password="ngModel"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+                minlength="6"
+                [class.invalid]="
+                  password.invalid &&
+                  (password.touched || submitted)
+                "
+              />
+
+
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePassword()">
+
+                {{ showPassword ? 'Hide' : 'Show' }}
+
+              </button>
+
+            </div>
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                password.invalid &&
+                (password.touched || submitted)
+              ">
+
+              <span
+                *ngIf="
+                  password.errors?.['required']
+                ">
+
+                Password is required
+
+              </span>
+
+              <span
+                *ngIf="
+                  password.errors?.['minlength']
+                ">
+
+                Password must contain at least
+                6 characters
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- =====================================
+               ADMIN ONLY FIELD
+          ====================================== -->
+
+          <div
+            class="form-group"
+            *ngIf="
+              loginForm.role === 'admin'
+            ">
+
+            <label for="loginAdminCode">
+
+              Admin code
+
+            </label>
+
+            <input
+              id="loginAdminCode"
+              type="text"
+              name="adminCode"
+              [(ngModel)]="loginForm.adminCode"
+              #adminCode="ngModel"
+              placeholder="Enter admin code"
+              required
+              [class.invalid]="
+                adminCode.invalid &&
+                (adminCode.touched || submitted)
+              "
+            />
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                adminCode.invalid &&
+                (adminCode.touched || submitted)
+              ">
+
+              Admin code is required
+
+            </div>
+
+          </div>
+
+
+
+          <!-- REMEMBER ME -->
+
+          <div class="remember-row">
+
+            <label class="remember">
+
+              <input
+                type="checkbox"
+                name="rememberMe"
+                [(ngModel)]="
+                  loginForm.rememberMe
+                "
+              />
+
+              <span>
+                Remember me
+              </span>
+
+            </label>
+
+          </div>
+
+
+
+          <!-- SERVER ERROR -->
+
+          <div
+       class="success-message"
+       *ngIf="successMessage">
+
+            {{ successMessage }}
+
+</div>
+
+<div
+  class="server-error"
+  *ngIf="serverError">
+
+  {{ serverError }}
+
+</div>
+
+
+
+          <!-- LOGIN BUTTON -->
+
+          <button
+            type="submit"
+            class="login-button"
+            [disabled]="isLoading">
+
+            <span
+              *ngIf="!isLoading">
+
+              Sign in
+
+            </span>
+
+            <span
+              *ngIf="isLoading">
+
+              Signing in...
+
+            </span>
+
+          </button>
+
+        </form>
+
+
+
+        <!-- SIGNUP -->
+
+        <div class="signup-text">
+
+          Don't have an account?
+
+          <a
+            routerLink="/auth/register">
+            
+
+            Create account
+
+          </a>
+
+        </div>
+
+
+
+        <!-- SECURITY -->
+
+        <div class="security-note">
+
+          🔒 Secure access to your asset
+          management system
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</div>

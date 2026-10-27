@@ -1,0 +1,981 @@
+/* =========================================================
+   SUMMARY SECTION
+   ========================================================= */
+
+.summary-section {
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   GRID
+   Desktop / Laptop
+   4 Columns × 2 Rows
+   ========================================================= */
+
+.summary-cards-grid {
+
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: clamp(16px, 1.5vw, 24px);
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BASE CARD
+   ========================================================= */
+
+.summary-card {
+
+  position: relative;
+
+  min-width: 0;
+
+  min-height: 190px;
+
+  padding:
+    clamp(18px, 1.5vw, 24px);
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid rgba(200, 180, 80, 0.25);
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffef8,
+      #fffbea,
+      #fff4c5
+    );
+
+  box-shadow:
+    0 3px 8px rgba(50, 45, 10, 0.04),
+    0 10px 25px rgba(50, 45, 10, 0.06);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+
+  animation:
+    cardFadeIn 0.55s ease both;
+}
+
+
+/* =========================================================
+   INDIVIDUAL CARD COLORS
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   1. TOTAL ASSETS
+   Light Yellow
+   --------------------------------------------------------- */
+
+.summary-card:nth-child(1) {
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffef8 0%,
+      #fffbea 55%,
+      #fff3b8 100%
+    );
+}
+
+
+/* ---------------------------------------------------------
+   2. ASSIGNED ASSETS
+   Light Aqua
+   --------------------------------------------------------- */
+
+.summary-card:nth-child(2) {
+
+  background:
+    linear-gradient(
+      135deg,
+      #f5ffff 0%,
+      #e9fbfa 55%,
+      #d4f5f2 100%
+    );
+}
+
+
+/* ---------------------------------------------------------
+   3. AVAILABLE ASSETS
+   Light Blue
+   --------------------------------------------------------- */
+
+.summary-card:nth-child(3) {
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7fbff 0%,
+      #edf7ff 55%,
+      #dceeff 100%
+    );
+}
+
+
+/* ---------------------------------------------------------
+   4. UNDER MAINTENANCE
+   Light Yellow
+   --------------------------------------------------------- */
+
+.summary-card:nth-child(4) {
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffef8 0%,
+      #fff9e8 55%,
+      #ffedbd 100%
+    );
+}
+
+
+/* =========================================================
+   SECOND ROW
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   5. DISPOSED ASSETS
+   Light Pink
+   --------------------------------------------------------- */
+
+.summary-card:nth-child(5) {
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff9fb 0%,
+      #fff1f5 55%,
+      #ffe1ea 100%
+    );
+}
+
+
+/* ---------------------------------------------------------
+   6. CURRENT BOOK VALUE
+   Light Lavender / Blue
+   --------------------------------------------------------- */
+
+.summary-card:nth-child(6) {
+
+  background:
+    linear-gradient(
+      135deg,
+      #fbfaff 0%,
+      #f3f1ff 55%,
+      #e7e3ff 100%
+    );
+}
+
+
+/* ---------------------------------------------------------
+   7. WARRANTY EXPIRING SOON
+   Light Orange
+   --------------------------------------------------------- */
+
+.summary-card:nth-child(7) {
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffaf5 0%,
+      #fff1e7 55%,
+      #ffe0c5 100%
+    );
+}
+
+
+/* ---------------------------------------------------------
+   8. TOTAL PURCHASE VALUE
+   Light Green
+   --------------------------------------------------------- */
+
+.summary-card:nth-child(8) {
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fff9 0%,
+      #edfaf0 55%,
+      #d9f1df 100%
+    );
+}
+
+
+/* =========================================================
+   DECORATIVE GLOW
+   ========================================================= */
+
+.summary-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 150px;
+
+  height: 150px;
+
+  top: -80px;
+
+  right: -70px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 215, 60, 0.25),
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  transition:
+    transform 0.5s ease,
+    opacity 0.5s ease;
+}
+
+
+/* =========================================================
+   SHINE EFFECT
+   ========================================================= */
+
+.summary-card::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+
+  left: -120%;
+
+  width: 70%;
+
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.45),
+      transparent
+    );
+
+  transform:
+    skewX(-20deg);
+
+  pointer-events: none;
+
+  transition:
+    left 0.7s ease;
+}
+
+
+/* =========================================================
+   CARD HOVER
+   ========================================================= */
+
+.summary-card:hover {
+
+  transform:
+    translateY(-7px);
+
+  border-color:
+    rgba(195, 165, 50, 0.45);
+
+  box-shadow:
+    0 8px 18px rgba(50, 45, 10, 0.08),
+    0 18px 40px rgba(50, 45, 10, 0.13);
+}
+
+
+.summary-card:hover::before {
+
+  transform:
+    scale(1.5);
+
+}
+
+
+.summary-card:hover::after {
+
+  left: 130%;
+
+}
+
+
+/* =========================================================
+   CARD ICON
+   ========================================================= */
+
+.card-icon {
+
+  position: absolute;
+
+  top: 18px;
+
+  right: 18px;
+
+  width: 48px;
+
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.9),
+      rgba(245, 232, 170, 0.85)
+    );
+
+  border:
+    1px solid rgba(190, 160, 50, 0.25);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 5px 12px rgba(90, 70, 10, 0.08);
+
+  font-size:
+    clamp(18px, 1.5vw, 22px);
+
+  z-index: 2;
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+
+/* =========================================================
+   EMOJI HOVER
+   ========================================================= */
+
+.summary-card:hover .card-icon {
+
+  transform:
+    translateY(-3px)
+    scale(1.12)
+    rotate(4deg);
+
+  box-shadow:
+    0 9px 18px rgba(90, 70, 10, 0.14);
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.card-content {
+
+  position: relative;
+
+  z-index: 2;
+
+  padding-top: 54px;
+
+  padding-right: 40px;
+
+  flex: 1;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   VALUE
+   ========================================================= */
+
+.card-value {
+
+  margin:
+    0 0 8px;
+
+  color:
+    #161616;
+
+  font-size:
+    clamp(24px, 2vw, 31px);
+
+  font-weight:
+    750;
+
+  line-height:
+    1.15;
+
+  letter-spacing:
+    -0.5px;
+
+  overflow-wrap:
+    anywhere;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.card-title {
+
+  margin: 0;
+
+  color:
+    #292929;
+
+  font-size:
+    clamp(10px, 0.75vw, 12px);
+
+  font-weight:
+    750;
+
+  line-height:
+    1.4;
+
+  letter-spacing:
+    0.3px;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.card-description {
+
+  margin:
+    7px 0 0;
+
+  color:
+    #77715e;
+
+  font-size:
+    clamp(10px, 0.7vw, 11px);
+
+  line-height:
+    1.45;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+   ========================================================= */
+
+.view-button {
+
+  position: relative;
+
+  z-index: 3;
+
+  align-self:
+    flex-end;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  gap:
+    5px;
+
+  min-height:
+    32px;
+
+  margin-top:
+    10px;
+
+  padding:
+    5px 2px;
+
+  border:
+    none;
+
+  background:
+    transparent;
+
+  color:
+    #4d472f;
+
+  font-family:
+    inherit;
+
+  font-size:
+    11px;
+
+  font-weight:
+    700;
+
+  cursor:
+    pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.view-arrow {
+
+  display:
+    inline-block;
+
+  transition:
+    transform 0.2s ease;
+}
+
+
+.view-button:hover {
+
+  color:
+    #111111;
+
+  transform:
+    translateX(3px);
+}
+
+
+.view-button:hover .view-arrow {
+
+  transform:
+    translateX(5px);
+}
+
+
+/* =========================================================
+   FOCUS ACCESSIBILITY
+   ========================================================= */
+
+.view-button:focus-visible {
+
+  outline:
+    2px solid #8d7620;
+
+  outline-offset:
+    4px;
+
+  border-radius:
+    4px;
+}
+
+
+/* =========================================================
+   CARD ENTRY ANIMATION
+   ========================================================= */
+
+@keyframes cardFadeIn {
+
+  0% {
+
+    opacity:
+      0;
+
+    transform:
+      translateY(22px)
+      scale(0.97);
+  }
+
+  100% {
+
+    opacity:
+      1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =========================================================
+   STAGGERED CARD ANIMATION
+   ========================================================= */
+
+.summary-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.summary-card:nth-child(2) {
+  animation-delay: 0.10s;
+}
+
+.summary-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.summary-card:nth-child(4) {
+  animation-delay: 0.20s;
+}
+
+.summary-card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.summary-card:nth-child(6) {
+  animation-delay: 0.30s;
+}
+
+.summary-card:nth-child(7) {
+  animation-delay: 0.35s;
+}
+
+.summary-card:nth-child(8) {
+  animation-delay: 0.40s;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   1400px+
+   ========================================================= */
+
+@media (min-width: 1400px) {
+
+  .summary-cards-grid {
+
+    gap:
+      24px;
+  }
+
+  .summary-card {
+
+    min-height:
+      205px;
+  }
+
+}
+
+
+/* =========================================================
+   LAPTOP
+   992px - 1399px
+   4 COLUMNS
+   ========================================================= */
+
+@media (max-width: 1399px) {
+
+  .summary-cards-grid {
+
+    gap:
+      18px;
+  }
+
+  .summary-card {
+
+    min-height:
+      185px;
+  }
+
+  .card-icon {
+
+    top:
+      16px;
+
+    right:
+      16px;
+
+    width:
+      44px;
+
+    height:
+      44px;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   768px - 991px
+   2 COLUMNS
+   ========================================================= */
+
+@media (max-width: 991px) {
+
+  .summary-cards-grid {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap:
+      18px;
+  }
+
+  .summary-card {
+
+    min-height:
+      185px;
+  }
+
+  .card-value {
+
+    font-size:
+      27px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   <= 767px
+   1 COLUMN
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  .summary-cards-grid {
+
+    grid-template-columns:
+      1fr;
+
+    gap:
+      15px;
+  }
+
+  .summary-card {
+
+    min-height:
+      175px;
+
+    padding:
+      18px;
+  }
+
+  .card-content {
+
+    padding-top:
+      50px;
+  }
+
+  .card-value {
+
+    font-size:
+      25px;
+  }
+
+  .card-title {
+
+    font-size:
+      11px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   <= 575px
+   ========================================================= */
+
+@media (max-width: 575px) {
+
+  .summary-cards-grid {
+
+    gap:
+      13px;
+  }
+
+  .summary-card {
+
+    min-height:
+      165px;
+
+    padding:
+      16px;
+
+    border-radius:
+      14px;
+  }
+
+  .card-icon {
+
+    top:
+      14px;
+
+    right:
+      14px;
+
+    width:
+      40px;
+
+    height:
+      40px;
+
+    border-radius:
+      11px;
+
+    font-size:
+      18px;
+  }
+
+  .card-content {
+
+    padding-top:
+      46px;
+
+    padding-right:
+      30px;
+  }
+
+  .card-value {
+
+    font-size:
+      23px;
+  }
+
+  .card-title {
+
+    font-size:
+      10.5px;
+  }
+
+  .card-description {
+
+    font-size:
+      10px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   <= 380px
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .summary-card {
+
+    min-height:
+      155px;
+
+    padding:
+      14px;
+  }
+
+  .card-value {
+
+    font-size:
+      21px;
+  }
+
+  .card-icon {
+
+    width:
+      37px;
+
+    height:
+      37px;
+
+    font-size:
+      17px;
+  }
+
+  .view-button {
+
+    font-size:
+      10px;
+  }
+
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) {
+
+  .summary-card:hover {
+
+    transform:
+      none;
+
+    box-shadow:
+      0 4px 12px rgba(50, 45, 10, 0.06);
+  }
+
+  .summary-card:hover .card-icon {
+
+    transform:
+      none;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .summary-card {
+
+    animation:
+      none;
+
+    transition:
+      none;
+  }
+
+  .summary-card::before,
+  .summary-card::after {
+
+    transition:
+      none;
+  }
+
+  .card-icon,
+  .view-button,
+  .view-arrow {
+
+    transition:
+      none;
+  }
+
+  .summary-card:hover {
+
+    transform:
+      none;
+  }
+
+}

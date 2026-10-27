@@ -1,0 +1,1437 @@
+/* =====================================================
+   CHARTS SECTION
+   ===================================================== */
+
+.charts-section {
+
+  width: 100%;
+  max-width: 100%;
+
+  padding: 4px 0 25px;
+
+  box-sizing: border-box;
+
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.charts-header {
+
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 18px;
+
+}
+
+
+.charts-heading {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+}
+
+
+.charts-main-icon {
+
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff8cf,
+      #ffe9a8
+    );
+
+  border: 1px solid
+    rgba(214, 181, 63, .25);
+
+  box-shadow:
+    0 5px 15px
+    rgba(90, 75, 20, .08);
+
+  font-size: 20px;
+
+}
+
+
+.charts-heading h2 {
+
+  margin: 0;
+
+  color: #252525;
+
+  font-size: 19px;
+
+  font-weight: 750;
+
+  letter-spacing: -.2px;
+
+}
+
+
+.charts-heading p {
+
+  margin: 3px 0 0;
+
+  color: #817a67;
+
+  font-size: 11px;
+
+}
+
+
+.charts-status {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 7px 11px;
+
+  border-radius: 20px;
+
+  background:
+    rgba(255,255,255,.7);
+
+  border: 1px solid
+    rgba(210,190,120,.25);
+
+  color: #77705e;
+
+  font-size: 10px;
+
+  font-weight: 650;
+
+}
+
+
+.status-dot {
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #55b98c;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(85,185,140,.12);
+
+  animation: livePulse 2s infinite;
+
+}
+
+
+/* =====================================================
+   CHART GRID
+   Desktop = 2 columns
+   ===================================================== */
+
+.charts-grid {
+
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+
+  box-sizing: border-box;
+
+}
+
+
+/* =====================================================
+   CHART CARD
+   ===================================================== */
+
+.chart-card {
+
+  position: relative;
+
+  min-width: 0;
+
+  min-height: 390px;
+
+  padding: 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  border-radius: 17px;
+
+  border: 1px solid
+    rgba(220, 197, 112, .24);
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffef8 0%,
+      #fffbee 45%,
+      #fff8dc 100%
+    );
+
+  box-shadow:
+    0 5px 14px
+      rgba(74,64,24,.05),
+    0 15px 35px
+      rgba(74,64,24,.07);
+
+  cursor: pointer;
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    border-color .3s ease;
+
+  animation:
+    chartEnter .55s
+    cubic-bezier(.2,.8,.2,1)
+    both;
+
+}
+
+
+.chart-card:nth-child(2) {
+
+  animation-delay: .1s;
+
+}
+
+
+/* Decorative glow */
+
+.chart-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  right: -80px;
+  top: -80px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,213,73,.20),
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  transition:
+    transform .5s ease;
+
+}
+
+
+.chart-card:hover {
+
+  transform:
+    translateY(-5px);
+
+  border-color:
+    rgba(205,174,53,.4);
+
+  box-shadow:
+    0 10px 22px
+      rgba(74,64,24,.08),
+    0 22px 45px
+      rgba(74,64,24,.13);
+
+}
+
+
+.chart-card:hover::before {
+
+  transform:
+    scale(1.4);
+
+}
+
+
+/* =====================================================
+   CARD HEADER
+   ===================================================== */
+
+.chart-card-header {
+
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+}
+
+
+.chart-small-label {
+
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #a39773;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+
+}
+
+
+.chart-card h3 {
+
+  margin: 0;
+
+  color: #292929;
+
+  font-size: 17px;
+
+  font-weight: 750;
+
+}
+
+
+.chart-menu {
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background:
+    rgba(255,255,255,.7);
+
+  color: #82775a;
+
+  font-size: 18px;
+
+}
+
+
+/* =====================================================
+   STATUS CHART
+   ===================================================== */
+
+.status-chart-content {
+
+  flex: 1;
+
+  display: grid;
+
+  grid-template-columns:
+    190px minmax(0,1fr);
+
+  align-items: center;
+
+  gap: 22px;
+
+  padding: 20px 0;
+
+}
+
+
+/* =====================================================
+   DONUT
+   ===================================================== */
+
+.donut-wrapper {
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+}
+
+
+.donut-chart {
+
+  position: relative;
+
+  width: 175px;
+  height: 175px;
+
+  border-radius: 50%;
+
+  background:
+
+    conic-gradient(
+
+      #6c8cff 0deg 144deg,
+
+      #58c7b0 144deg 306deg,
+
+      #f2b84b 306deg 360deg
+
+    );
+
+  box-shadow:
+
+    0 10px 25px
+      rgba(75,85,130,.12),
+
+    inset 0 0 0 1px
+      rgba(255,255,255,.5);
+
+  animation:
+    donutReveal 1s
+    cubic-bezier(.2,.8,.2,1);
+
+}
+
+
+/* Donut hole */
+
+.donut-chart::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 31px;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffef8,
+      #fff9e3
+    );
+
+  box-shadow:
+    inset 0 2px 8px
+      rgba(80,70,20,.04);
+
+}
+
+
+.donut-center {
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+.donut-center strong {
+
+  color: #252525;
+
+  font-size: 30px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+}
+
+
+.donut-center span {
+
+  margin-top: 5px;
+
+  color: #837b64;
+
+  font-size: 9px;
+
+  font-weight: 650;
+
+}
+
+
+/* =====================================================
+   STATUS LEGEND
+   ===================================================== */
+
+.status-legend {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 11px;
+
+}
+
+
+.status-item {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 9px 10px;
+
+  border-radius: 10px;
+
+  background:
+    rgba(255,255,255,.55);
+
+  border: 1px solid
+    rgba(220,200,140,.18);
+
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+
+}
+
+
+.status-item:hover {
+
+  transform:
+    translateX(4px);
+
+  background:
+    rgba(255,255,255,.9);
+
+  box-shadow:
+    0 5px 12px
+      rgba(90,80,30,.06);
+
+}
+
+
+.status-left {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 0;
+
+}
+
+
+.status-icon {
+
+  width: 27px;
+  height: 27px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  color: white;
+
+  font-size: 12px;
+
+}
+
+
+.status-name {
+
+  color: #4a4638;
+
+  font-size: 11px;
+
+  font-weight: 650;
+
+}
+
+
+.status-right {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+}
+
+
+.status-right strong {
+
+  color: #242424;
+
+  font-size: 13px;
+
+}
+
+
+.status-right span {
+
+  color: #88806c;
+
+  font-size: 10px;
+
+}
+
+
+/* =====================================================
+   GROWTH SUMMARY
+   ===================================================== */
+
+.growth-badge {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  padding: 6px 9px;
+
+  border-radius: 9px;
+
+  color: #438a67;
+
+  background:
+    #edf9f1;
+
+  border: 1px solid
+    #d4eddd;
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+}
+
+
+.growth-summary {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap: 10px;
+
+  margin-top: 20px;
+
+}
+
+
+.growth-summary > div {
+
+  padding: 10px;
+
+  border-radius: 10px;
+
+  background:
+    rgba(255,255,255,.55);
+
+  border:
+    1px solid
+    rgba(220,200,140,.18);
+
+}
+
+
+.growth-summary span {
+
+  display: block;
+
+  color: #8a826e;
+
+  font-size: 9px;
+
+  margin-bottom: 4px;
+
+}
+
+
+.growth-summary strong {
+
+  color: #292929;
+
+  font-size: 17px;
+
+}
+
+
+.positive-growth {
+
+  color: #42926a !important;
+
+}
+
+
+/* =====================================================
+   GRAPH
+   ===================================================== */
+
+.graph-area {
+
+  flex: 1;
+
+  min-height: 190px;
+
+  display: flex;
+
+  margin-top: 15px;
+
+}
+
+
+.y-axis {
+
+  width: 28px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  padding:
+    4px 0 28px;
+
+}
+
+
+.y-axis span {
+
+  color: #a39a82;
+
+  font-size: 8px;
+
+  text-align: right;
+
+}
+
+
+.graph {
+
+  position: relative;
+
+  flex: 1;
+
+  min-width: 0;
+
+  height: 170px;
+
+  border-left:
+    1px solid
+    rgba(170,155,100,.15);
+
+  border-bottom:
+    1px solid
+    rgba(170,155,100,.2);
+
+}
+
+
+.grid-line {
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  border-top:
+    1px dashed
+    rgba(170,155,100,.15);
+
+}
+
+
+.line-20 { top: 0; }
+.line-15 { top: 25%; }
+.line-10 { top: 50%; }
+.line-5  { top: 75%; }
+.line-0  { bottom: 0; }
+
+
+/* =====================================================
+   BARS
+   ===================================================== */
+
+.bars {
+
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content:
+    space-around;
+
+  gap: 10px;
+
+  padding:
+    0 8px;
+
+}
+
+
+.bar-group {
+
+  position: relative;
+
+  flex: 1;
+
+  height: 100%;
+
+  max-width: 48px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+}
+
+
+.bar {
+
+  width: 65%;
+
+  min-height: 3px;
+
+  border-radius:
+    8px 8px 3px 3px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #8ca1ff 0%,
+      #637df0 100%
+    );
+
+  box-shadow:
+    0 5px 12px
+      rgba(99,125,240,.18);
+
+  transform-origin:
+    bottom;
+
+  animation:
+    barGrow .8s
+    cubic-bezier(.2,.8,.2,1)
+    both;
+
+  transition:
+    filter .2s ease,
+    transform .2s ease;
+
+}
+
+
+.bar-group:nth-child(2) .bar {
+  animation-delay: .08s;
+}
+
+.bar-group:nth-child(3) .bar {
+  animation-delay: .16s;
+}
+
+.bar-group:nth-child(4) .bar {
+  animation-delay: .24s;
+}
+
+.bar-group:nth-child(5) .bar {
+  animation-delay: .32s;
+}
+
+.bar-group:nth-child(6) .bar {
+  animation-delay: .40s;
+}
+
+
+.bar-group:hover .bar {
+
+  transform:
+    scaleX(1.12);
+
+  filter:
+    brightness(1.08);
+
+}
+
+
+.bar-value {
+
+  position: absolute;
+
+  bottom: calc(
+    var(--bar-height, 50%) + 8px
+  );
+
+  color: #5d6da9;
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+}
+
+
+.month {
+
+  position: absolute;
+
+  bottom: -24px;
+
+  color: #88806c;
+
+  font-size: 9px;
+
+  font-weight: 650;
+
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.chart-footer {
+
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding-top: 13px;
+
+  border-top:
+    1px solid
+    rgba(200,185,120,.18);
+
+}
+
+
+.chart-footer > span {
+
+  color: #89816d;
+
+  font-size: 9px;
+
+}
+
+
+.chart-footer button {
+
+  border: 0;
+
+  background: transparent;
+
+  color: #5d657f;
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  transition:
+    transform .2s ease,
+    color .2s ease;
+
+}
+
+
+.chart-footer button:hover {
+
+  color: #30394f;
+
+  transform:
+    translateX(3px);
+
+}
+
+
+/* =====================================================
+   ANIMATIONS
+   ===================================================== */
+
+@keyframes chartEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(18px)
+      scale(.98);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+
+@keyframes donutReveal {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      scale(.7)
+      rotate(-25deg);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      scale(1)
+      rotate(0);
+
+  }
+
+}
+
+
+@keyframes barGrow {
+
+  from {
+
+    transform:
+      scaleY(0);
+
+  }
+
+  to {
+
+    transform:
+      scaleY(1);
+
+  }
+
+}
+
+
+@keyframes livePulse {
+
+  0%,
+  100% {
+
+    opacity: 1;
+
+  }
+
+  50% {
+
+    opacity: .45;
+
+  }
+
+}
+
+
+/* =====================================================
+   LARGE DESKTOP
+   ===================================================== */
+
+@media (min-width: 1400px) {
+
+  .charts-grid {
+
+    gap: 24px;
+
+  }
+
+  .chart-card {
+
+    min-height: 410px;
+
+    padding: 22px;
+
+  }
+
+}
+
+
+/* =====================================================
+   LAPTOP
+   ===================================================== */
+
+@media (max-width: 1199px) {
+
+  .charts-grid {
+
+    gap: 17px;
+
+  }
+
+  .chart-card {
+
+    padding: 17px;
+
+  }
+
+  .status-chart-content {
+
+    grid-template-columns:
+      155px minmax(0,1fr);
+
+    gap: 15px;
+
+  }
+
+  .donut-chart {
+
+    width: 150px;
+    height: 150px;
+
+  }
+
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width: 991px) {
+
+  .charts-grid {
+
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+  }
+
+  .status-chart-content {
+
+    grid-template-columns: 1fr;
+
+    justify-items: center;
+
+  }
+
+  .status-legend {
+
+    width: 100%;
+
+  }
+
+  .chart-card {
+
+    min-height: 430px;
+
+  }
+
+}
+
+
+/* =====================================================
+   SMALL TABLET / LARGE MOBILE
+   ===================================================== */
+
+@media (max-width: 767px) {
+
+  .charts-header {
+
+    align-items: flex-start;
+
+  }
+
+  .charts-status {
+
+    display: none;
+
+  }
+
+  .charts-grid {
+
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+
+  }
+
+  .chart-card {
+
+    min-height: 400px;
+
+    padding: 17px;
+
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 575px) {
+
+  .charts-section {
+
+    padding-bottom: 15px;
+
+  }
+
+  .charts-main-icon {
+
+    width: 38px;
+    height: 38px;
+
+    font-size: 18px;
+
+  }
+
+  .charts-heading h2 {
+
+    font-size: 17px;
+
+  }
+
+  .charts-heading p {
+
+    font-size: 10px;
+
+  }
+
+  .chart-card {
+
+    min-height: 390px;
+
+    border-radius: 14px;
+
+  }
+
+  .chart-card h3 {
+
+    font-size: 15px;
+
+  }
+
+  .status-chart-content {
+
+    padding: 15px 0;
+
+  }
+
+  .donut-chart {
+
+    width: 155px;
+    height: 155px;
+
+  }
+
+  .growth-summary {
+
+    gap: 6px;
+
+  }
+
+  .growth-summary > div {
+
+    padding: 8px;
+
+  }
+
+  .growth-summary strong {
+
+    font-size: 15px;
+
+  }
+
+}
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 380px) {
+
+  .chart-card {
+
+    padding: 14px;
+
+  }
+
+  .donut-chart {
+
+    width: 135px;
+    height: 135px;
+
+  }
+
+  .donut-chart::after {
+
+    inset: 25px;
+
+  }
+
+  .donut-center strong {
+
+    font-size: 25px;
+
+  }
+
+  .growth-summary span {
+
+    font-size: 8px;
+
+  }
+
+  .growth-summary strong {
+
+    font-size: 13px;
+
+  }
+
+}
+
+
+/* =====================================================
+   TOUCH DEVICES
+   ===================================================== */
+
+@media (hover: none) {
+
+  .chart-card:hover {
+
+    transform: none;
+
+  }
+
+  .status-item:hover {
+
+    transform: none;
+
+  }
+
+  .bar-group:hover .bar {
+
+    transform: none;
+
+  }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .chart-card,
+  .donut-chart,
+  .bar,
+  .status-dot {
+
+    animation: none;
+
+  }
+
+  .chart-card,
+  .status-item,
+  .bar,
+  .chart-footer button {
+
+    transition: none;
+
+  }
+
+}

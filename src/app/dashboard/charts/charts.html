@@ -1,0 +1,355 @@
+<section class="charts-section">
+
+  <!-- =================================================
+       SECTION HEADER
+       ================================================= -->
+
+  <div class="charts-header">
+
+    <div class="charts-heading">
+
+      <div class="charts-main-icon">
+        📊
+      </div>
+
+      <div>
+        <h2>Asset Analytics</h2>
+
+        <p>
+          Asset status and monthly asset growth overview
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="charts-status">
+
+      <span class="status-dot"></span>
+
+      <span>Live Dashboard</span>
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       CHART GRID
+       ================================================= -->
+
+  <div class="charts-grid">
+
+
+    <!-- =================================================
+         CHART 1 : ASSET STATUS
+         ================================================= -->
+
+    <article
+      class="chart-card status-chart-card"
+      (click)="viewChart('asset-status')">
+
+
+      <!-- CARD HEADER -->
+
+      <div class="chart-card-header">
+
+        <div>
+
+          <span class="chart-small-label">
+            ASSET OVERVIEW
+          </span>
+
+          <h3>
+            Asset Status
+          </h3>
+
+        </div>
+
+
+        <div class="chart-menu">
+          ⋮
+        </div>
+
+      </div>
+
+
+      <!-- DONUT AREA -->
+
+      <div class="status-chart-content">
+
+
+        <!-- DONUT -->
+
+        <div class="donut-wrapper">
+
+          <div class="donut-chart">
+
+            <div class="donut-center">
+
+              <strong>
+                {{ totalAssets }}
+              </strong>
+
+              <span>
+                Total Assets
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- LEGEND -->
+
+        <div class="status-legend">
+
+          @for (
+            status of assetStatus;
+            track status.label
+          ) {
+
+            <div class="status-item">
+
+              <div class="status-left">
+
+                <span
+                  class="status-icon"
+                  [style.background]="status.color">
+
+                  {{ status.icon }}
+
+                </span>
+
+                <span class="status-name">
+                  {{ status.label }}
+                </span>
+
+              </div>
+
+
+              <div class="status-right">
+
+                <strong>
+                  {{ status.value }}
+                </strong>
+
+                <span>
+                  {{ status.percentage }}%
+                </span>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- FOOTER -->
+
+      <div class="chart-footer">
+
+        <span>
+          Current asset distribution
+        </span>
+
+        <button
+          type="button"
+          (click)="viewChart('asset-status'); $event.stopPropagation()">
+
+          View Details
+          <span>→</span>
+
+        </button>
+
+      </div>
+
+    </article>
+
+
+
+    <!-- =================================================
+         CHART 2 : MONTHLY GROWTH
+         ================================================= -->
+
+    <article
+      class="chart-card growth-chart-card"
+      (click)="viewChart('monthly-growth')">
+
+
+      <!-- CARD HEADER -->
+
+      <div class="chart-card-header">
+
+        <div>
+
+          <span class="chart-small-label">
+            PERFORMANCE
+          </span>
+
+          <h3>
+            Monthly Asset Growth
+          </h3>
+
+        </div>
+
+
+        <div class="growth-badge">
+
+          <span>
+            ↗
+          </span>
+
+          {{ monthlyGrowth }}%
+
+        </div>
+
+      </div>
+
+
+      <!-- SUMMARY -->
+
+      <div class="growth-summary">
+
+        <div>
+
+          <span>
+            Current Assets
+          </span>
+
+          <strong>
+            {{ currentMonthAssets }}
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            Previous Month
+          </span>
+
+          <strong>
+            {{ previousMonthAssets }}
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            Growth
+          </span>
+
+          <strong class="positive-growth">
+            +{{ monthlyGrowth }}%
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- GRAPH -->
+
+      <div class="graph-area">
+
+        <!-- Y AXIS -->
+
+        <div class="y-axis">
+
+          <span>20</span>
+          <span>15</span>
+          <span>10</span>
+          <span>5</span>
+          <span>0</span>
+
+        </div>
+
+
+        <!-- GRAPH -->
+
+        <div class="graph">
+
+          <!-- GRID LINES -->
+
+          <div class="grid-line line-20"></div>
+          <div class="grid-line line-15"></div>
+          <div class="grid-line line-10"></div>
+          <div class="grid-line line-5"></div>
+          <div class="grid-line line-0"></div>
+
+
+          <!-- BARS -->
+
+          <div class="bars">
+
+            @for (
+              item of monthlyAssets;
+              track item.month
+            ) {
+
+              <div class="bar-group">
+
+                <div
+                  class="bar-value">
+
+                  {{ item.value }}
+
+                </div>
+
+
+                <div
+                  class="bar"
+                  [style.height.%]="getBarHeight(item.value)">
+
+                </div>
+
+
+                <span class="month">
+                  {{ item.month }}
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- FOOTER -->
+
+      <div class="chart-footer">
+
+        <span>
+          Asset registration trend
+        </span>
+
+        <button
+          type="button"
+          (click)="viewChart('monthly-growth'); $event.stopPropagation()">
+
+          View Details
+          <span>→</span>
+
+        </button>
+
+      </div>
+
+    </article>
+
+  </div>
+
+</section>

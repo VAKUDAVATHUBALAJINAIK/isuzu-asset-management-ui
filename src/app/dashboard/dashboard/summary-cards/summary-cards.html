@@ -1,0 +1,47 @@
+<section class="summary-section">
+
+  <div class="summary-cards-grid">
+
+    @for (card of summaryCards; track card.title) {
+
+      <article class="summary-card">
+
+        <!-- Icon -->
+        <div class="card-icon" aria-hidden="true">
+          {{ card.icon }}
+        </div>
+
+        <!-- Card Content -->
+        <div class="card-content">
+
+          <h3 class="card-value">
+            {{ card.value }}
+          </h3>
+
+          <h4 class="card-title">
+            {{ card.title }}
+          </h4>
+
+          <p class="card-description">
+            {{ card.description }}
+          </p>
+
+        </div>
+
+        <!-- View -->
+        <button
+          type="button"
+          class="view-button">
+
+          <span>View</span>
+          <span class="view-arrow">→</span>
+
+        </button>
+
+      </article>
+
+    }
+
+  </div>
+
+</section>
